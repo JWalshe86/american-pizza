@@ -1,4 +1,5 @@
 import gspread
+import time
 from google.oauth2.service_account import Credentials
 from termcolor import colored
 from tabulate import tabulate
@@ -44,10 +45,57 @@ def display_pizza_menu():
 
     print(tabulate(menu_data, headers=col_names, tablefmt="fancy_grid") + 
           "\n\n")
-    print("To start the order please enter the code for your pizza choice"
-          " (1, 2, 3, 4, 5, 6)\n")
-    print("* You can only pick one pizza type at a time with the option to add"
-          " to your order later\n")
+    while True:      
+        print("To start the order please enter the code for your pizza choice"
+              " by choosing a number between 1 - 6\n")
+        print("* You can only pick one pizza type at a time with the option to"
+              " add to your order later\n")
+
+        pizza_type = input("Write your answer here: \n")
+
+        user_data = pizza_type.split(" ")
+
+        if validate_data(user_data, ["1", "2", "3", "4", "5", "6"], 1):
+            print("\nData is valid!")
+            print("We get you to the next step...")
+            time.sleep(2)
+            break
+
+
+def validate_data(values, list_to_check, number_of_values_required):
+    """
+    This function checks if the values provided by the user in the values 
+    parameter meet the requirements about the number_of_values_required.
+    Also checks if their format is correct and can be found in list_to_check
+    provided by the user when the function is called.
+    If any of the requirements is not respected it throws an error to inform
+    the user.  
+    """
+    try:
+        if number_of_values_required == 1:
+            if(len(values) > 1):
+                raise ValueError(
+                    f"Exactly 1 value required, you provided {len(values)}"
+                )
+        else:
+            if(len(values) > 5):
+                raise ValueError(
+                    "You can not choose more than 5 topings"
+                )
+    except ValueError as e:
+        print(f"\nInvalid data: {e}, please try again.\n")
+        return False
+    try:
+        for value in values:
+            if value not in list_to_check:
+                raise ValueError(
+                    "We didn't recognised your values"
+                )
+    except ValueError as e:
+        print(f"\nInvalid data: {e}, please try again.\n")
+        return False    
+
+    return True
 
 
 def main():
