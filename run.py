@@ -106,7 +106,7 @@ def display_pizza_sizes():
     Displays a sugestive message for user and the pizza catalogue for sizes and 
     prices.
     A variable will memorise the user's input value representing the chosen
-    size for the pizza or 
+    size for the pizza.
     """  
     os.system('cls' if os.name == 'nt' else "printf '\033c'")
 
@@ -149,17 +149,63 @@ def display_pizza_sizes():
     return user_data[0]  
 
 
+def get_pizza_quantity():
+    """
+    Displays a sugestive message for user.
+    A variable will memorise the user's input value representing the chosen
+    quantity for the pizza.
+    """  
+    os.system('cls' if os.name == 'nt' else "printf '\033c'")
+
+    print("\033[1m" + "Please insert the quantity that you want, not more than 10" + "\033[0m \n") 
+
+    while True:      
+        print("Enter a number between 1 and 10" + "\n" +
+              "\033[1m" + "OR" + "\033[1m")
+        print("(B) to go back to pizza sizes and prices guide\n")
+        print("(R) to restart your order\n")
+
+        pizza_quantity = input("\033[1m" + "Write your answer here: \n" + "\033[1m" )
+
+        user_data = pizza_quantity.split(" ")
+
+        if validate_data(user_data, ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "B", "R"], 1):
+            print("\n\nData is valid!")
+            if user_data[0].upper() == "B":
+                print("We get you back to pizza sizes and prices guide")
+                time.sleep(2)
+            else:
+                print("We get you to the next step...")
+                time.sleep(2)
+            break
+
+    return user_data[0]  
+
+
 def main():
     """
     Run all program functions
     """  
-    pizza_type = display_pizza_menu()
-    pizza_size = display_pizza_sizes()
-    while pizza_size.upper() == "B":
+    # create loops so the user have the possibility to return to the previous steps
+    while True:
         pizza_type = display_pizza_menu()
         pizza_size = display_pizza_sizes()
-    print(pizza_type)    
-    print(pizza_size)
+        while pizza_size.upper() == "B":
+            pizza_type = display_pizza_menu()
+            pizza_size = display_pizza_sizes()
+        pizza_quantity = get_pizza_quantity()
+        while pizza_quantity.upper() == "B":
+            pizza_size = display_pizza_sizes()
+            while pizza_size.upper() == "B":
+                pizza_type = display_pizza_menu()
+                pizza_size = display_pizza_sizes()
+            pizza_quantity = get_pizza_quantity()
+        if(pizza_quantity.upper() == "R"):
+            continue  
+        print(pizza_type)
+        print(pizza_size)
+        print(pizza_quantity) 
+        break    
 
 
 main()
