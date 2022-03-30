@@ -1,5 +1,6 @@
 import gspread
 import time
+import os
 from google.oauth2.service_account import Credentials
 from termcolor import colored
 from tabulate import tabulate
@@ -42,7 +43,7 @@ def validate_data(values, list_to_check, number_of_values_required):
         return False
     try:
         for value in values:
-            if value not in list_to_check:
+            if value.upper() not in list_to_check:
                 raise ValueError(
                     "We didn't recognised your values"
                 )
@@ -59,6 +60,8 @@ def display_pizza_menu():
     A variable will memorise the user's input value representing 
     the pizza's code for the order
     """  
+    os.system('cls' if os.name == 'nt' else "printf '\033c'")
+
     print("\033[1m" + "Welcome to " + colored('American pizza', 'green') + 
           " !" + "\033[0m \n") 
     print("Here is our" + "\033[1m" + " pizza menu " + "\033[1m" + 
@@ -85,17 +88,65 @@ def display_pizza_menu():
         print("* You can only pick one pizza type at a time with the option to"
               " add to your order later\n")
 
-        pizza_type = input("\033[1m" + "Write your answer here: \n\n" + "\033[1m" )
+        pizza_type = input("\033[1m" + "Write your answer here: \n" + "\033[1m" )
 
         user_data = pizza_type.split(" ")
 
         if validate_data(user_data, ["1", "2", "3", "4", "5", "6"], 1):
-            print("\nData is valid!")
+            print("\n\nData is valid!")
             print("We get you to the next step...")
             time.sleep(2)
             break
 
-    return user_data        
+    return user_data[0]        
+
+
+def display_pizza_sizes():
+    """
+    Displays a sugestive message for user and the pizza catalogue for sizes and 
+    prices.
+    A variable will memorise the user's input value representing the chosen
+    size for the pizza or 
+    """  
+    os.system('cls' if os.name == 'nt' else "printf '\033c'")
+
+    print("\033[1m" + "Here is our catalogue for sizes and prices."
+          " Wich one do you preffer?" + "\033[0m \n") 
+
+    sizes = SHEET.worksheet("sizes")
+    data = sizes.get_all_values()
+
+    # define header names
+    col_names = []
+    for ind in range(1, 5):
+        column = sizes.col_values(ind)
+        col_names.append(column[0])
+
+    # define sizes catalogue data
+    sizes_data = data[-3:]
+
+    print(tabulate(sizes_data, headers=col_names, tablefmt="fancy_grid") + 
+          "\n\n")
+    while True:      
+        print("Please enter the code for your pizza size choice (S, M, L)" + "\n" +
+              "\033[1m" + "OR" + "\033[1m")
+        print("(B) to go back to our pizza menu\n")
+
+        pizza_size = input("\033[1m" + "Write your answer here: \n" + "\033[1m" )
+
+        user_data = pizza_size.split(" ")
+
+        if validate_data(user_data, ["S", "M", "L", "B"], 1):
+            print("\n\nData is valid!")
+            if user_data[0].upper() == "B":
+                print("We get you back to pizza menu")
+                time.sleep(2)
+            else:
+                print("We get you to the next step...")
+                time.sleep(2)
+            break
+
+    return user_data[0]  
 
 
 def main():
@@ -103,7 +154,12 @@ def main():
     Run all program functions
     """  
     pizza_type = display_pizza_menu()
-    # print(pizza_type)
+    pizza_size = display_pizza_sizes()
+    while pizza_size.upper() == "B":
+        pizza_type = display_pizza_menu()
+        pizza_size = display_pizza_sizes()
+    print(pizza_type)    
+    print(pizza_size)
 
 
 main()
