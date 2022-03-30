@@ -17,6 +17,42 @@ GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('american_pizza_order_system')
 
 
+def validate_data(values, list_to_check, number_of_values_required):
+    """
+    This function checks if the values provided by the user in the values 
+    parameter meet the requirements about the number_of_values_required.
+    Also checks if their format is correct and can be found in list_to_check
+    provided by the user when the function is called.
+    If any of the requirements is not respected it throws an error to inform
+    the user.  
+    """
+    try:
+        if number_of_values_required == 1:
+            if(len(values) > 1):
+                raise ValueError(
+                    f"Exactly 1 value required, you provided {len(values)}"
+                )
+        else:
+            if(len(values) > 5):
+                raise ValueError(
+                    "You can not choose more than 5 topings"
+                )
+    except ValueError as e:
+        print("\n" + colored("Invalid data: ", "red") + f"{e}, please try again.\n")
+        return False
+    try:
+        for value in values:
+            if value not in list_to_check:
+                raise ValueError(
+                    "We didn't recognised your values"
+                )
+    except ValueError as e:
+        print("\n" + colored("Invalid data: ", "red") + f"{e}, please try again.\n")
+        return False    
+
+    return True
+    
+
 def display_pizza_menu():
     """
     Displays a welcome message and the pizza menu for the user.
@@ -41,8 +77,6 @@ def display_pizza_menu():
             last_space_index = row[2][:45].rfind(" ")
             row[2] = row[2][:last_space_index + 1] + "\n" + row[2][last_space_index + 1:]
 
-    # print(menu_data)        
-
     print(tabulate(menu_data, headers=col_names, tablefmt="fancy_grid") + 
           "\n\n")
     while True:      
@@ -51,7 +85,7 @@ def display_pizza_menu():
         print("* You can only pick one pizza type at a time with the option to"
               " add to your order later\n")
 
-        pizza_type = input("Write your answer here: \n")
+        pizza_type = input("\033[1m" + "Write your answer here: \n\n" + "\033[1m" )
 
         user_data = pizza_type.split(" ")
 
@@ -61,48 +95,15 @@ def display_pizza_menu():
             time.sleep(2)
             break
 
-
-def validate_data(values, list_to_check, number_of_values_required):
-    """
-    This function checks if the values provided by the user in the values 
-    parameter meet the requirements about the number_of_values_required.
-    Also checks if their format is correct and can be found in list_to_check
-    provided by the user when the function is called.
-    If any of the requirements is not respected it throws an error to inform
-    the user.  
-    """
-    try:
-        if number_of_values_required == 1:
-            if(len(values) > 1):
-                raise ValueError(
-                    f"Exactly 1 value required, you provided {len(values)}"
-                )
-        else:
-            if(len(values) > 5):
-                raise ValueError(
-                    "You can not choose more than 5 topings"
-                )
-    except ValueError as e:
-        print(f"\nInvalid data: {e}, please try again.\n")
-        return False
-    try:
-        for value in values:
-            if value not in list_to_check:
-                raise ValueError(
-                    "We didn't recognised your values"
-                )
-    except ValueError as e:
-        print(f"\nInvalid data: {e}, please try again.\n")
-        return False    
-
-    return True
+    return user_data        
 
 
 def main():
     """
     Run all program functions
     """  
-    display_pizza_menu()
+    pizza_type = display_pizza_menu()
+    # print(pizza_type)
 
 
 main()
