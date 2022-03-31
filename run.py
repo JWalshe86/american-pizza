@@ -138,7 +138,7 @@ def display_pizza_sizes():
         if validate_data(user_data, ["S", "M", "L", "B"], 1):
             print("\n\nData is valid!")
             if user_data[0].upper() == "B":
-                print("We get you back to pizza menu")
+                print("We get you back to pizza menu...")
                 time.sleep(2)
             else:
                 print("We get you to the next step...")
@@ -181,8 +181,8 @@ def get_custom_pizza_sauce():
 
         if validate_data(user_data, ["1", "2", "3", "R"], 1):
             print("\n\nData is valid!")
-            if user_data[0].upper() == "B":
-                print("We get you back to pizza sizes and prices guide")
+            if user_data[0].upper() == "R":
+                print("We get you back to pizza menu...")
                 time.sleep(2)
             else:
                 print("We get you to the next step...")
@@ -217,7 +217,7 @@ def get_custom_pizza_cheese():
           "\n\n")
     while True:      
         print("Choose between the options 1 and 2" + "\n" + "OR")
-        print("\033[1m"+"(B) " + "\033[0m" + "to go back to sauces option")
+        print("\033[1m"+"(B) " + "\033[0m" + "to go back to sauces options")
         print("\033[1m"+"(R) " + "\033[0m" + "to restart your order\n")
 
         custom_pizza_cheese = input("\033[1m" + "Write your answer here: \n" + "\033[1m" )
@@ -227,14 +227,65 @@ def get_custom_pizza_cheese():
         if validate_data(user_data, ["1", "2", "B", "R"], 1):
             print("\n\nData is valid!")
             if user_data[0].upper() == "B":
-                print("We get you back to pizza sizes and prices guide")
+                print("We get you back to sauces options...")
                 time.sleep(2)
-            else:
+            elif user_data[0].upper() == "R":
+                print("We get you back to pizza menu...")
+                time.sleep(2)
+            else:  
                 print("We get you to the next step...")
                 time.sleep(2)
             break
 
     return user_data[0]  
+
+
+def get_custom_pizza_topings():
+    """
+    Displays a sugestive message for user and the options for topings
+    in a table as the last step in creating a custom pizza.
+    A variable will memorise the user's input value representing the chosen
+    topings for the custom pizza.
+    """ 
+    os.system('cls' if os.name == 'nt' else "printf '\033c'")
+
+    print("\033[1m" + "This is the last step in creating you custom pizza." + 
+          "\nYou can choose up to 5 topings for your pizza" + "\033[0m \n") 
+
+    topings = SHEET.worksheet("topings")
+    data = topings.get_all_values()
+
+    # define header names
+    col_names = data[0]
+
+    # define sizes catalogue data
+    topings_data = data[-10:]
+
+    print(tabulate(topings_data, headers=col_names, tablefmt="fancy_grid") + 
+          "\n\n")
+    while True:      
+        print("Enter numbers between 1 and 10 separated by spaces, not more than five." + "\n" + "OR")
+        print("\033[1m"+"(B) " + "\033[0m" + "to go back to cheese options")
+        print("\033[1m"+"(R) " + "\033[0m" + "to restart your order\n")
+
+        custom_pizza_topings = input("\033[1m" + "Write your answer here: \n" + "\033[1m" )
+
+        user_data = custom_pizza_topings.split(" ")
+
+        if validate_data(user_data, ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "B", "R"], 5):
+            print("\n\nData is valid!")
+            if user_data[0].upper() == "B":
+                print("We get you back to cheese options...")
+                time.sleep(2)
+            elif user_data[0].upper() == "R":
+                print("We get you back to pizza menu...")
+                time.sleep(2)
+            else:  
+                print("We get you to the next step...")
+                time.sleep(2)
+            break
+
+    return user_data  
 
 
 def get_pizza_quantity():
@@ -269,6 +320,32 @@ def get_pizza_quantity():
     return user_data[0]  
 
 
+def get_values_for_custom_pizza():
+    values = []
+    custom_pizza_sauce = get_custom_pizza_sauce() 
+    if custom_pizza_sauce.upper() == "R":
+        values.append("restart")
+        return values  
+    custom_pizza_cheese = get_custom_pizza_cheese()
+    while custom_pizza_cheese.upper() == "B":
+        custom_pizza_sauce = get_custom_pizza_sauce()
+        custom_pizza_cheese = get_custom_pizza_cheese()
+    if custom_pizza_cheese.upper() == "R":
+        values.append("restart") 
+        return values
+    custom_pizza_topings = get_custom_pizza_topings()
+    while custom_pizza_topings[0].upper() == "B":
+        custom_pizza_cheese = get_custom_pizza_cheese()
+        while custom_pizza_cheese.upper() == "B":
+            custom_pizza_sauce = get_custom_pizza_sauce()
+            custom_pizza_cheese = get_custom_pizza_cheese()
+        custom_pizza_topings = get_custom_pizza_topings()
+    if custom_pizza_topings[0].upper() == "R":
+        values.append("restart") 
+        return values
+    return values    
+
+
 def main():
     """
     Run all program functions
@@ -282,12 +359,8 @@ def main():
             pizza_size = display_pizza_sizes()
 
         if pizza_type == "6":
-            custom_pizza_sauce = get_custom_pizza_sauce() 
-            if custom_pizza_sauce.upper() == "R":
-                continue  
-            custom_pizza_cheese = get_custom_pizza_cheese()
-            if custom_pizza_cheese.upper() == "R":
-                continue 
+            custom_pizza_values = get_values_for_custom_pizza()
+            print(custom_pizza_values)
         else:    
             pizza_quantity = get_pizza_quantity()
             while pizza_quantity.upper() == "B":
@@ -301,9 +374,9 @@ def main():
             if(pizza_quantity.upper() == "R"):
                 continue  
 
-        print(pizza_type)
-        print(pizza_size)
-        print(pizza_quantity) 
+        # print(pizza_type)
+        # print(pizza_size)
+        # print(pizza_quantity) 
         break    
 
 
