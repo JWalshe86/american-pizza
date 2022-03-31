@@ -129,7 +129,7 @@ def display_pizza_sizes():
           "\n\n")
     while True:      
         print("Please enter the code for your pizza size choice (S, M, L)" + "\n" + "OR" )
-        print("\033[1m"+"(B) " +"\033[0m" + "to go back to pizza sizes and prices guide\n")
+        print("\033[1m"+"(B) " + "\033[0m" + "to go back to pizza sizes and prices guide\n")
 
         pizza_size = input("\033[1m" + "Write your answer here: \n" + "\033[1m" )
 
@@ -173,14 +173,58 @@ def get_custom_pizza_sauce():
           "\n\n")
     while True:      
         print("Enter a number between 1 and 3" + "\n" + "OR")
-        print("\033[1m"+"(B) " +"\033[0m" + "to go back to pizza sizes and prices guide")
-        print("\033[1m"+"(R) " +"\033[0m" + "to restart your order\n")
+        print("\033[1m"+"(R) " + "\033[0m" + "to restart your order\n")
 
         custom_pizza_sauce = input("\033[1m" + "Write your answer here: \n" + "\033[1m" )
 
         user_data = custom_pizza_sauce.split(" ")
 
-        if validate_data(user_data, ["1", "2", "3", "B", "R"], 1):
+        if validate_data(user_data, ["1", "2", "3", "R"], 1):
+            print("\n\nData is valid!")
+            if user_data[0].upper() == "B":
+                print("We get you back to pizza sizes and prices guide")
+                time.sleep(2)
+            else:
+                print("We get you to the next step...")
+                time.sleep(2)
+            break
+
+    return user_data[0]  
+
+
+def get_custom_pizza_cheese():
+    """
+    Displays a sugestive message for user and the options for cheese
+    in a table as the second step in creating a custom pizza.
+    A variable will memorise the user's input value representing the chosen
+    cheese option for the custom pizza.
+    """ 
+    os.system('cls' if os.name == 'nt' else "printf '\033c'")
+
+    print("\033[1m" + "This is the second step in creating you custom pizza." + 
+          "\nPlease choose an option for the cheese." + "\033[0m \n") 
+
+    cheese = SHEET.worksheet("cheese")
+    data = cheese.get_all_values()
+
+    # define header names
+    col_names = data[0]
+
+    # define sizes catalogue data
+    cheese_data = data[-2:]
+
+    print(tabulate(cheese_data, headers=col_names, tablefmt="fancy_grid") + 
+          "\n\n")
+    while True:      
+        print("Choose between the options 1 and 2" + "\n" + "OR")
+        print("\033[1m"+"(B) " + "\033[0m" + "to go back to sauces option")
+        print("\033[1m"+"(R) " + "\033[0m" + "to restart your order\n")
+
+        custom_pizza_cheese = input("\033[1m" + "Write your answer here: \n" + "\033[1m" )
+
+        user_data = custom_pizza_cheese.split(" ")
+
+        if validate_data(user_data, ["1", "2", "B", "R"], 1):
             print("\n\nData is valid!")
             if user_data[0].upper() == "B":
                 print("We get you back to pizza sizes and prices guide")
@@ -205,8 +249,8 @@ def get_pizza_quantity():
 
     while True:      
         print("Enter a number between 1 and 10" + "\n" + "OR" )
-        print("\033[1m"+"(B) " +"\033[0m" + "to go back to pizza sizes and prices guide")
-        print("\033[1m"+"(R) " +"\033[0m" + "to restart your order\n")
+        print("\033[1m"+"(B) " + "\033[0m" + "to go back to pizza sizes and prices guide")
+        print("\033[1m"+"(R) " + "\033[0m" + "to restart your order\n")
 
         pizza_quantity = input("\033[1m" + "Write your answer here: \n" + "\033[1m" )
 
@@ -239,8 +283,11 @@ def main():
 
         if pizza_type == "6":
             custom_pizza_sauce = get_custom_pizza_sauce() 
-            if(custom_pizza_sauce.upper() == "R"):
+            if custom_pizza_sauce.upper() == "R":
                 continue  
+            custom_pizza_cheese = get_custom_pizza_cheese()
+            if custom_pizza_cheese.upper() == "R":
+                continue 
         else:    
             pizza_quantity = get_pizza_quantity()
             while pizza_quantity.upper() == "B":
