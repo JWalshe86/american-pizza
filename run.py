@@ -346,6 +346,8 @@ def get_values_for_custom_pizza():
     if custom_pizza_sauce.upper() == "R":
         values.append("restart")
         return values  
+    else:
+        values.append(custom_pizza_sauce.upper())    
     custom_pizza_cheese = get_custom_pizza_cheese()
     while custom_pizza_cheese.upper() == "B":
         custom_pizza_sauce = get_custom_pizza_sauce()
@@ -353,6 +355,8 @@ def get_values_for_custom_pizza():
     if custom_pizza_cheese.upper() == "R":
         values.append("restart") 
         return values
+    else:
+        values.append(custom_pizza_cheese.upper())    
     custom_pizza_topings = get_custom_pizza_topings()
     while custom_pizza_topings[0].upper() == "B":
         custom_pizza_cheese = get_custom_pizza_cheese()
@@ -363,6 +367,9 @@ def get_values_for_custom_pizza():
     if custom_pizza_topings[0].upper() == "R":
         values.append("restart") 
         return values
+    else:
+        for toping in custom_pizza_topings:
+            values.append(toping.upper())     
     return values    
 
 
@@ -380,7 +387,8 @@ def main():
 
         if pizza_type == "6":
             custom_pizza_values = get_values_for_custom_pizza()
-            print(custom_pizza_values)
+            if custom_pizza_values[len(custom_pizza_values)-1] == "restart":
+                continue
         else:    
             pizza_quantity = get_pizza_quantity()
             while pizza_quantity.upper() == "B":
