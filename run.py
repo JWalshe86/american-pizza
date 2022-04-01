@@ -28,6 +28,7 @@ def validate_data(values, list_to_check, number_of_values_required):
     the user.  
     """
     try:
+        #raise error if user enters a number of values different than the number required
         if number_of_values_required == 1:
             if(len(values) > 1):
                 raise ValueError(
@@ -41,15 +42,34 @@ def validate_data(values, list_to_check, number_of_values_required):
     except ValueError as e:
         print("\n" + colored("Invalid data: ", "red") + f"{e}, please try again.\n")
         return False
-    try:
-        for value in values:
-            if value.upper() not in list_to_check:
+    # for 1 to 5 values inserted by the user, raise error if there is any value that can not be
+    # converted into int or if any value can't be found in the list provided                 
+    if(len(values) > 1):
+        for value in values:   
+            try:
+                int(value)
+            except ValueError:
+                print("\n" + colored("Invalid data: ", "red") + "Wrong numbers format, please try again.\n")
+                return False
+            try:   
+                if value.upper() not in list_to_check:
+                    raise ValueError(
+                        "We didn't recognised your value"
+                    )
+            except ValueError as e:
+                print("\n" + colored("Invalid data: ", "red") + f"{e}, please try again.\n")
+                return False   
+    # for exactly one value inserted by te user, raise error if value can't be found in the
+    # list provided                 
+    else:                 
+        try:   
+            if values[0].upper() not in list_to_check:
                 raise ValueError(
-                    "We didn't recognised your values"
+                    "We didn't recognised your value"
                 )
-    except ValueError as e:
-        print("\n" + colored("Invalid data: ", "red") + f"{e}, please try again.\n")
-        return False    
+        except ValueError as e:
+            print("\n" + colored("Invalid data: ", "red") + f"{e}, please try again.\n")
+            return False    
 
     return True
     
