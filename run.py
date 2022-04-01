@@ -401,6 +401,54 @@ def finalize_order():
     return user_data[0]  
 
 
+def get_sheet_values(type, size, custom_values):
+
+    pizzas = SHEET.worksheet("pizzas")
+    sizes = SHEET.worksheet("sizes")
+    sauces = SHEET.worksheet("sauces")
+    cheese = SHEET.worksheet("cheese")
+    topings = SHEET.worksheet("topings")
+
+    pizzas_data = pizzas.get_all_values()
+    sizes_data = sizes.get_all_values()
+    sauces_data = sauces.get_all_values()
+    cheese_data = cheese.get_all_values()
+    topings_data = topings.get_all_values()
+
+    pizza_type_string = " "
+    for row in pizzas_data[-6:]:
+        if row[0] == type:
+            pizza_type_string = row[1]
+
+    pizza_size_string = " "
+    for row in sizes_data[-3:]:
+        if row[0] == size.upper():
+            pizza_size_string = row[1]   
+
+    pizza_sauce_string = " "
+    pizza_cheese_string = " "
+    pizza_topings_strings = []
+    if custom_values != " ":
+        for row in sauces_data[-3:]:
+            if row[0] == custom_values[0]:
+                pizza_sauce_string = row[1]
+
+        for row in cheese_data[-2:]:
+            if row[0] == custom_values[1]:
+                pizza_cheese_string = row[1]   
+
+        for row in topings_data[-10:]:
+            for toping in custom_values[2]:
+                if row[0] == toping:
+                    pizza_topings_strings.append(row[1])   
+    else:
+        pizza_sauce_string = " "
+        pizza_cheese_string = " "
+        pizza_topings_strings = " "
+
+    return pizza_type_string, pizza_size_string, pizza_sauce_string, pizza_cheese_string, pizza_topings_strings
+
+
 def main():
     """
     Run all program functions
@@ -461,6 +509,7 @@ def main():
         for order in orders_list:
             print(order.get_string())
 
+        print(get_sheet_values(pizza_type, pizza_size, custom_pizza_values))
         break    
 
 
