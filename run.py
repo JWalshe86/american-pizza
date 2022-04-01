@@ -367,8 +367,7 @@ def get_values_for_custom_pizza():
         values.append("restart") 
         return values
     else:
-        for toping in custom_pizza_topings:
-            values.append(toping.upper())     
+        values.append(custom_pizza_topings)     
     return values    
 
 
@@ -406,8 +405,33 @@ def main():
     """
     Run all program functions
     """  
+    class PizzaOrder:
+        def __init__(self, type, size, custom_values, quantity):
+            self.type = type
+            self.size = size
+            if custom_values == " ":
+                self.sauce = " "
+                self.cheese = " "
+                self.topings = " "
+            else:
+                self.sauce = custom_values[0]
+                self.cheese = custom_values[1]
+                self.topings = custom_values[2]                
+            self.quantity = quantity
+
+        def get_string(self):
+            if self.sauce == " ":
+                return f"type: {self.type}, size: {self.size}, quantity:{self.quantity}"   
+            else:
+                return f"type: {self.type}, size: {self.size}, sauce: {self.sauce}, cheese: {self.cheese}, topings: {self.topings}, quantity: {self.quantity}"
+
+    add_to_order = False
+
     # create loops so the user have the possibility to return to the previous steps
+    # when user's input = "B" and restart the order when user's input = "R"
     while True:
+        if add_to_order == False:
+            orders_list = []
         pizza_type = display_pizza_menu()
         pizza_size = display_pizza_sizes()
         while pizza_size.upper() == "B":
@@ -418,19 +442,25 @@ def main():
             custom_pizza_values = get_values_for_custom_pizza()
             if custom_pizza_values[len(custom_pizza_values)-1] == "restart":
                 continue   
-
+        else:
+            custom_pizza_values = " "        
         pizza_quantity = get_pizza_quantity()
         if pizza_quantity.upper() == "R":
             continue  
 
         finalize_order_value = finalize_order()  
         if finalize_order_value.upper() == "Y":
+            add_to_order = True
+            order = PizzaOrder(pizza_type, pizza_size, custom_pizza_values, pizza_quantity)
+            orders_list.append(order)
             continue  
-        print(pizza_type)
-        print(pizza_size)
-        if pizza_type == "6":
-            print(custom_pizza_values)
-        print(pizza_quantity) 
+        else:
+            order = PizzaOrder(pizza_type, pizza_size, custom_pizza_values, pizza_quantity)
+            orders_list.append(order)
+ 
+        for order in orders_list:
+            print(order.get_string())
+
         break    
 
 
