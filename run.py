@@ -475,6 +475,10 @@ def get_sheet_values(type, size, custom_values):
 
 
 def generate_order_refference(orders_refference):
+    """
+    Generate a random number between 0 and 1000 as order 
+    refference for user
+    """ 
     import random
     while True:
         n = random.randint(0, 1000)
@@ -484,6 +488,41 @@ def generate_order_refference(orders_refference):
         break    
     return n    
 
+
+def final_menu(refference):
+    """
+    Displays a sugestive message for user.
+    A variable will memorise the user's input value representing the option for 
+    live orders, restart order or exit program.
+    """
+    os.system('cls' if os.name == 'nt' else "printf '\033c'")
+
+    print("\033[1m" + "Thank you!" + "\033[0m \n") 
+    print("Your order refference is: " +  colored(refference, "green") + "\n") 
+   
+    while True:      
+        print("What do you want to do next?") 
+        print("\033[1m" + "(L) " + "\033[0m" + "check live orders")
+        print("\033[1m" + "(R) " + "\033[0m" + "make another order")
+        print("\033[1m" + "(E) " + "\033[0m" + "exit program\n")
+
+
+        answer = input("\033[1m" + "Write your answer here: \n" + "\033[1m" )
+
+        user_data = answer.split(" ")
+
+        if validate_data(user_data, ["L", "R", "E"], 1):
+            print("\n\nData is valid!")
+            if user_data[0].upper() == "L":  
+                print("Live Orders\n\n")
+                time.sleep(1)
+                continue
+            elif user_data[0].upper() == "P":
+                print("We get you back to pizza menu...")
+                time.sleep(2)    
+            break
+
+    return user_data[0]  
 
 def main():
     """
@@ -569,10 +608,12 @@ def main():
         elif finalize_order_value.upper() == "R":
             continue 
         orders_refference.append(generate_order_refference(orders_refference))    
-        for order in orders_refference:
-            print(order)
-        for order in orders_list:
-            print(order.get_string())
+        final_menu_value = final_menu(orders_refference[0])
+        if final_menu_value.upper() == "R":
+            continue
+        else:
+            os.system('cls' if os.name == 'nt' else "printf '\033c'")
+            print(colored("Hope to see you soon!", "yellow"))
 
         break  
   
