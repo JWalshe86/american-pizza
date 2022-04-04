@@ -454,17 +454,12 @@ def main():
     Run all program functions
     """  
     class PizzaOrder:
-        def __init__(self, type, size, custom_values, quantity):
+        def __init__(self, type, size, sauce, cheese, topings, quantity):
             self.type = type
             self.size = size
-            if custom_values == " ":
-                self.sauce = " "
-                self.cheese = " "
-                self.topings = " "
-            else:
-                self.sauce = custom_values[0]
-                self.cheese = custom_values[1]
-                self.topings = custom_values[2]                
+            self.sauce = sauce
+            self.cheese = cheese
+            self.topings = topings             
             self.quantity = quantity
 
         def get_string(self):
@@ -496,20 +491,25 @@ def main():
         if pizza_quantity.upper() == "R":
             continue  
 
+        sheet_values = get_sheet_values(pizza_type, pizza_size, custom_pizza_values)   
+        type = sheet_values[0] 
+        size = sheet_values[1]
+        sauce = sheet_values[2]
+        cheese = sheet_values[3]
+        topings = sheet_values[4]
         finalize_order_value = finalize_order()  
         if finalize_order_value.upper() == "Y":
             add_to_order = True
-            order = PizzaOrder(pizza_type, pizza_size, custom_pizza_values, pizza_quantity)
+            order = PizzaOrder(type, size, sauce, cheese, topings, pizza_quantity)
             orders_list.append(order)
             continue  
         else:
-            order = PizzaOrder(pizza_type, pizza_size, custom_pizza_values, pizza_quantity)
+            order = PizzaOrder(type, size, sauce, cheese, topings, pizza_quantity)
             orders_list.append(order)
  
         for order in orders_list:
             print(order.get_string())
 
-        print(get_sheet_values(pizza_type, pizza_size, custom_pizza_values))
         break    
 
 
