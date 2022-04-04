@@ -177,7 +177,7 @@ def get_custom_pizza_sauce():
     """ 
     os.system('cls' if os.name == 'nt' else "printf '\033c'")
 
-    print("\033[1m" + "This is the first step in creating you custom pizza." + 
+    print("\033[1m" + "This is the first step in creating your custom pizza." + 
           "\nPlease choose an option for your sauce." + "\033[0m \n") 
 
     sauces = SHEET.worksheet("sauces")
@@ -221,7 +221,7 @@ def get_custom_pizza_cheese():
     """ 
     os.system('cls' if os.name == 'nt' else "printf '\033c'")
 
-    print("\033[1m" + "This is the second step in creating you custom pizza." + 
+    print("\033[1m" + "This is the second step in creating your custom pizza." + 
           "\nPlease choose an option for the cheese." + "\033[0m \n") 
 
     cheese = SHEET.worksheet("cheese")
@@ -269,7 +269,7 @@ def get_custom_pizza_topings():
     """ 
     os.system('cls' if os.name == 'nt' else "printf '\033c'")
 
-    print("\033[1m" + "This is the last step in creating you custom pizza." + 
+    print("\033[1m" + "This is the last step in creating your custom pizza." + 
           "\nYou can choose up to 5 topings for your pizza" + "\033[0m \n") 
 
     topings = SHEET.worksheet("topings")
@@ -371,7 +371,7 @@ def get_values_for_custom_pizza():
     return values    
 
 
-def finalize_order():
+def finalize_order(orders_list):
     """
     Displays a sugestive message for user.
     A variable will memorise the user's input value representing the option for 
@@ -380,6 +380,10 @@ def finalize_order():
     os.system('cls' if os.name == 'nt' else "printf '\033c'")
 
     print("\033[1m" + "You're almost ready!" + "\033[0m \n") 
+    print("Your order contains:") 
+    for order in orders_list:
+        print(colored(order.get_string(), "yellow"))
+    print("\n") 
 
     while True:      
         print("Do you want to add something else?" + "\033[1m" + "(Y/N)" + "\033[1m" )
@@ -497,15 +501,14 @@ def main():
         sauce = sheet_values[2]
         cheese = sheet_values[3]
         topings = sheet_values[4]
-        finalize_order_value = finalize_order()  
+
+        order = PizzaOrder(type, size, sauce, cheese, topings, pizza_quantity)
+        orders_list.append(order)
+
+        finalize_order_value = finalize_order(orders_list)  
         if finalize_order_value.upper() == "Y":
             add_to_order = True
-            order = PizzaOrder(type, size, sauce, cheese, topings, pizza_quantity)
-            orders_list.append(order)
             continue  
-        else:
-            order = PizzaOrder(type, size, sauce, cheese, topings, pizza_quantity)
-            orders_list.append(order)
  
         for order in orders_list:
             print(order.get_string())
