@@ -468,9 +468,32 @@ def main():
 
         def get_string(self):
             if self.sauce == " ":
-                return f"type: {self.type}, size: {self.size}, quantity:{self.quantity}"   
+                pizza_string = f"{self.quantity} X {self.size} {self.type} "
+                if int(self.quantity) > 1:
+                    pizza_string += "pizzas"
+                else:
+                     pizza_string += "pizza" 
+
+                return  pizza_string
+
             else:
-                return f"type: {self.type}, size: {self.size}, sauce: {self.sauce}, cheese: {self.cheese}, topings: {self.topings}, quantity: {self.quantity}"
+                custom_pizza_string = f"{self.quantity} X {self.size} Custom "
+                if int(self.quantity) > 1:
+                    custom_pizza_string += "pizzas "
+                else:
+                    custom_pizza_string += "pizza " 
+
+                custom_pizza_string += f"({self.sauce}, {self.cheese}, "   
+
+                for ind in range(len(self.topings)):
+                    custom_pizza_string += self.topings[ind]
+
+                    if ind != len(self.topings) - 1:
+                        custom_pizza_string += ", " 
+                    else:
+                        custom_pizza_string += ")"
+
+                return custom_pizza_string
 
     add_to_order = False
 
