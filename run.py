@@ -474,6 +474,17 @@ def get_sheet_values(type, size, custom_values):
     return pizza_type_string, pizza_size_string, pizza_sauce_string, pizza_cheese_string, pizza_topings_strings
 
 
+def generate_order_refference(orders_refference):
+    import random
+    while True:
+        n = random.randint(0, 1000)
+        for number in orders_refference:
+            if number == n:
+                continue
+        break    
+    return n    
+
+
 def main():
     """
     Run all program functions
@@ -519,7 +530,7 @@ def main():
                 return custom_pizza_string
 
     add_to_order = False
-
+    orders_refference = []
     # create loops so the user have the possibility to return to the previous steps
     # when user's input = "B" and restart the order when user's input = "R"
     while True:
@@ -557,7 +568,9 @@ def main():
             continue 
         elif finalize_order_value.upper() == "R":
             continue 
- 
+        orders_refference.append(generate_order_refference(orders_refference))    
+        for order in orders_refference:
+            print(order)
         for order in orders_list:
             print(order.get_string())
 
