@@ -74,7 +74,7 @@ def validate_data(values, list_to_check, number_of_values_required):
     return True
     
 
-def display_pizza_menu():
+def display_pizza_menu(orders_list):
     """
     Displays a welcome message and the pizza menu for the user.
     A variable will memorise the user's input value representing 
@@ -103,16 +103,30 @@ def display_pizza_menu():
     print(tabulate(menu_data, headers=col_names, tablefmt="fancy_grid") + 
           "\n\n")
     while True:      
-        print("To start the order please enter the code for your pizza choice"
-              " by choosing a number between 1 - 6\n")
+        print("Please enter the code for your pizza choice"
+              " by choosing a number between 1 and 6"+ "\n" + "OR" )
+        print("\033[1m"+"(P) " + "\033[0m" + "to see what your order contains until this moment\n")
         print("* You can only pick one pizza type at a time with the option to"
               " add to your order later\n")
 
-        pizza_type = input("\033[1m" + "Write your answer here: \n" + "\033[1m" )
+        pizza_type = input("\033[1m" + "Write your answer here: \n" + "\033[0m" )
 
         user_data = pizza_type.split(" ")
 
-        if validate_data(user_data, ["1", "2", "3", "4", "5", "6"], 1):
+        if validate_data(user_data, ["1", "2", "3", "4", "5", "6", "P"], 1):
+            if user_data[0].upper() == "P":
+                if len(orders_list) == 0:
+                    print(colored("You haven't added nothing to your order yet\n\n", "yellow"))
+                    time.sleep(1)
+                    continue
+                else:    
+                    print("Your order contains:") 
+                    for order in orders_list:
+                        print(colored(order.get_string(), "yellow"))
+                        print("\n\n")
+                        time.sleep(1)
+                    continue 
+
             print("\n\nData is valid!")
             print("We get you to the next step...")
             time.sleep(2)
@@ -329,7 +343,10 @@ def get_pizza_quantity():
         if validate_data(user_data, ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "R"], 1):
             print("\n\nData is valid!")
             if user_data[0].upper() == "B":
-                print("We get you back to pizza sizes and prices guide")
+                print("We get you back to pizza sizes and prices guide...")
+                time.sleep(2)
+            elif user_data[0].upper() == "R":
+                print("We get you to back to pizza menu...")
                 time.sleep(2)
             else:
                 print("We get you to the next step...")
@@ -468,6 +485,7 @@ def main():
 
         def get_string(self):
             if self.sauce == " ":
+                # generate string for custom pizza
                 pizza_string = f"{self.quantity} X {self.size} {self.type} "
                 if int(self.quantity) > 1:
                     pizza_string += "pizzas"
@@ -477,6 +495,7 @@ def main():
                 return  pizza_string
 
             else:
+                # generate string for normal pizza
                 custom_pizza_string = f"{self.quantity} X {self.size} Custom "
                 if int(self.quantity) > 1:
                     custom_pizza_string += "pizzas "
@@ -502,10 +521,10 @@ def main():
     while True:
         if add_to_order == False:
             orders_list = []
-        pizza_type = display_pizza_menu()
+        pizza_type = display_pizza_menu(orders_list)
         pizza_size = display_pizza_sizes()
         while pizza_size.upper() == "B":
-            pizza_type = display_pizza_menu()
+            pizza_type = display_pizza_menu(orders_list)
             pizza_size = display_pizza_sizes()
 
         if pizza_type == "6":
@@ -536,7 +555,8 @@ def main():
         for order in orders_list:
             print(order.get_string())
 
-        break    
+        break  
+  
 
 
 main()
