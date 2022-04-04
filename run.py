@@ -403,19 +403,23 @@ def finalize_order(orders_list):
     print("\n") 
 
     while True:      
-        print("Do you want to add something else?" + "\033[1m" + "(Y/N)" + "\033[1m" )
+        print("Please choose one of the options bellow:") 
+        print("\033[1m" + "(A) " + "\033[0m" + "to add to your order")
+        print("\033[1m" + "(F) " + "\033[0m" + "to finish your order")
+        print("\033[1m" + "(R) " + "\033[0m" + "to restart your order\n")
+
 
         answer = input("\033[1m" + "Write your answer here: \n" + "\033[1m" )
 
         user_data = answer.split(" ")
 
-        if validate_data(user_data, ["Y", "N"], 1):
+        if validate_data(user_data, ["A", "F", "R"], 1):
             print("\n\nData is valid!")
-            if user_data[0].upper() == "Y":
-                print("We get you back to pizza menu")
+            if user_data[0].upper() == "F":  
+                print("We process your order...")
                 time.sleep(2)
             else:
-                print("We get you to the next step...")
+                print("We get you back to pizza menu...")
                 time.sleep(2)
             break
 
@@ -548,9 +552,11 @@ def main():
         orders_list.append(order)
 
         finalize_order_value = finalize_order(orders_list)  
-        if finalize_order_value.upper() == "Y":
+        if finalize_order_value.upper() == "A":
             add_to_order = True
-            continue  
+            continue 
+        elif finalize_order_value.upper() == "R":
+            continue 
  
         for order in orders_list:
             print(order.get_string())
