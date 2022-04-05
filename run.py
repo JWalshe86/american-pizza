@@ -161,7 +161,7 @@ def display_pizza_sizes():
           " Wich one do you preffer?" + "\033[0m \n")
 
     sizes = SHEET.worksheet("sizes")
-    data = sizes.get_all_values()
+    # data = sizes.get_all_values()
 
     # define header names
     col_names = []
@@ -170,7 +170,10 @@ def display_pizza_sizes():
         col_names.append(column[0])
 
     # define sizes catalogue data
-    sizes_data = data[-3:]
+    sizes_data = []
+    for ind in range(2, 5):
+        row = sizes.row_values(ind)
+        sizes_data.append(row[:4])
 
     print(tabulate(sizes_data, headers=col_names, tablefmt="fancy_grid") +
           "\n\n")
