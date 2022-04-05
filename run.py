@@ -444,6 +444,8 @@ def finalize_order(orders_list):
     print("Your order contains:")
     for order in orders_list:
         print(colored(order.get_string(), "yellow"))
+    print("Total price:")
+    print(colored("€ " + f"{get_total_price(orders_list)}", "green"))
     print("\n")
 
     while True:
@@ -496,9 +498,11 @@ def get_sheet_values(p_type, size, custom_values):
 
     # get pizza size name
     pizza_size_string = " "
+    pizza_price = 0
     for row in sizes_data[-3:]:
         if row[0] == size.upper():
             pizza_size_string = row[1]
+            pizza_price = float(row[3])
 
     pizza_sauce_string = " "
     pizza_cheese_string = " "
@@ -524,7 +528,7 @@ def get_sheet_values(p_type, size, custom_values):
         pizza_topings_strings = " "
 
     return pizza_type_string, pizza_size_string, pizza_sauce_string, \
-        pizza_cheese_string, pizza_topings_strings
+        pizza_cheese_string, pizza_topings_strings, pizza_price
 
 
 def generate_order_refference(orders_refference):
@@ -576,6 +580,17 @@ def final_menu(refference):
     return user_data[0]
 
 
+def get_total_price(orders_list):
+    """
+    Calculate total price value
+    """
+    total = 0
+    for order in orders_list:
+        total += order.price
+    total = round(total, 2)
+    return total
+
+
 def main():
     """
     Run all program functions
@@ -584,13 +599,15 @@ def main():
         """
         Creates an instance of PizzaOrder
         """
-        def __init__(self, p_type, size, sauce, cheese, topings, quantity):
+        def __init__(self, p_type, size, sauce, cheese, topings, quantity,
+                     price):
             self.p_type = p_type
             self.size = size
             self.sauce = sauce
             self.cheese = cheese
             self.topings = topings
             self.quantity = quantity
+            self.price = price
 
         def get_string(self):
             """ Generates a string that includes the order details"""
@@ -663,10 +680,11 @@ def main():
         sauce = sheet_values[2]
         cheese = sheet_values[3]
         topings = sheet_values[4]
+        unit_price = sheet_values[5]
 
         # creates a instance of the order
         order = PizzaOrder(p_type, size, sauce, cheese, topings,
-                           pizza_quantity)
+                           pizza_quantity, int(pizza_quantity) * unit_price)
         # adds the instance to the orders list
         orders_list.append(order)
 
