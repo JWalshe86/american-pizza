@@ -141,9 +141,8 @@ def display_pizza_menu(orders_list):
                         time.sleep(1)
                     continue
 
-            print("\n\nData is valid!")
             print("We get you to the next step...")
-            time.sleep(2)
+            time.sleep(1)
             break
 
     return user_data[0]
@@ -188,13 +187,12 @@ def display_pizza_sizes():
         user_data = pizza_size.split(" ")
 
         if validate_data(user_data, ["S", "M", "L", "B"], 1):
-            print("\n\nData is valid!")
             if user_data[0].upper() == "B":
                 print("We get you back to pizza menu...")
-                time.sleep(2)
+                time.sleep(1)
             else:
                 print("We get you to the next step...")
-                time.sleep(2)
+                time.sleep(1)
             break
 
     return user_data[0]
@@ -235,13 +233,12 @@ def get_custom_pizza_sauce():
         user_data = custom_pizza_sauce.split(" ")
 
         if validate_data(user_data, ["1", "2", "3", "R"], 1):
-            print("\n\nData is valid!")
             if user_data[0].upper() == "R":
                 print("We get you back to pizza menu...")
-                time.sleep(2)
+                time.sleep(1)
             else:
                 print("We get you to the next step...")
-                time.sleep(2)
+                time.sleep(1)
             break
 
     return user_data[0]
@@ -284,16 +281,15 @@ def get_custom_pizza_cheese():
         user_data = custom_pizza_cheese.split(" ")
 
         if validate_data(user_data, ["1", "2", "B", "R"], 1):
-            print("\n\nData is valid!")
             if user_data[0].upper() == "B":
                 print("We get you back to sauces options...")
-                time.sleep(2)
+                time.sleep(1)
             elif user_data[0].upper() == "R":
                 print("We get you back to pizza menu...")
-                time.sleep(2)
+                time.sleep(1)
             else:
                 print("We get you to the next step...")
-                time.sleep(2)
+                time.sleep(1)
             break
 
     return user_data[0]
@@ -337,16 +333,15 @@ def get_custom_pizza_topings():
 
         if validate_data(user_data, ["1", "2", "3", "4", "5", "6", "7", "8",
                                      "9", "10", "B", "R"], 5):
-            print("\n\nData is valid!")
             if user_data[0].upper() == "B":
                 print("We get you back to cheese options...")
-                time.sleep(2)
+                time.sleep(1)
             elif user_data[0].upper() == "R":
                 print("We get you back to pizza menu...")
-                time.sleep(2)
+                time.sleep(1)
             else:
                 print("We get you to the next step...")
-                time.sleep(2)
+                time.sleep(1)
             break
 
     return user_data
@@ -375,16 +370,15 @@ def get_pizza_quantity():
 
         if validate_data(user_data, ["1", "2", "3", "4", "5", "6", "7", "8",
                                      "9", "10", "R"], 1):
-            print("\n\nData is valid!")
             if user_data[0].upper() == "B":
                 print("We get you back to pizza sizes and prices guide...")
-                time.sleep(2)
+                time.sleep(1)
             elif user_data[0].upper() == "R":
                 print("We get you to back to pizza menu...")
-                time.sleep(2)
+                time.sleep(1)
             else:
                 print("We get you to the next step...")
-                time.sleep(2)
+                time.sleep(1)
             break
 
     return user_data[0]
@@ -461,13 +455,12 @@ def finalize_order(orders_list):
         user_data = answer.split(" ")
 
         if validate_data(user_data, ["A", "F", "R"], 1):
-            print("\n\nData is valid!")
             if user_data[0].upper() == "F":
                 print("We process your order...")
-                time.sleep(2)
+                time.sleep(1)
             else:
                 print("We get you back to pizza menu...")
-                time.sleep(2)
+                time.sleep(1)
             break
 
     return user_data[0]
@@ -568,14 +561,13 @@ def final_menu(refference):
         user_data = answer.split(" ")
 
         if validate_data(user_data, ["L", "R", "E"], 1):
-            print("\n\nData is valid!")
             if user_data[0].upper() == "L":
                 print("Live Orders\n\n")
                 time.sleep(1)
                 continue
             elif user_data[0].upper() == "P":
                 print("We get you back to pizza menu...")
-                time.sleep(2)
+                time.sleep(1)
             break
 
     return user_data[0]
@@ -658,6 +650,7 @@ def main():
         # gets pizza quantity
         pizza_quantity = get_pizza_quantity()
         if pizza_quantity.upper() == "R":
+            add_to_order = False
             continue
         # gets pizza codes strings from worksheets
         sheet_values = get_sheet_values(pizza_type, pizza_size,
@@ -680,6 +673,7 @@ def main():
             add_to_order = True
             continue
         elif finalize_order_value.upper() == "R":
+            add_to_order = False
             continue
 
         # add order refference to the orders refferences list
@@ -688,6 +682,7 @@ def main():
         # display order refference and final menu
         final_menu_value = final_menu(orders_refference[0])
         if final_menu_value.upper() == "R":
+            add_to_order = False
             continue
         else:
             os.system('cls' if os.name == 'nt' else "printf '\033c'")
