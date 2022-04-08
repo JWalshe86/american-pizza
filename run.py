@@ -505,6 +505,7 @@ def get_sheet_values(p_type, size, custom_values):
         if row[0] == size.upper():
             pizza_size_string = row[1]
             pizza_price = float(row[3])
+            pizza_prep_time = int(row[4])
 
     pizza_sauce_string = " "
     pizza_cheese_string = " "
@@ -530,7 +531,8 @@ def get_sheet_values(p_type, size, custom_values):
         pizza_topings_strings = " "
 
     return pizza_type_string, pizza_size_string, pizza_sauce_string, \
-        pizza_cheese_string, pizza_topings_strings, pizza_price
+        pizza_cheese_string, pizza_topings_strings, pizza_price, \
+        pizza_prep_time
 
 
 def generate_order_refference(orders_refference):
@@ -602,7 +604,7 @@ def main():
         Creates an instance of PizzaOrder
         """
         def __init__(self, p_type, size, sauce, cheese, topings, quantity,
-                     price):
+                     price, prep_time):
             self.p_type = p_type
             self.size = size
             self.sauce = sauce
@@ -610,6 +612,7 @@ def main():
             self.topings = topings
             self.quantity = quantity
             self.price = price
+            self.prep_time = prep_time
 
         def get_string(self):
             """ Generates a string that includes the order details"""
@@ -683,10 +686,12 @@ def main():
         cheese = sheet_values[3]
         topings = sheet_values[4]
         unit_price = sheet_values[5]
+        prep_time = sheet_values[6]
 
         # creates a instance of the order
         order = PizzaOrder(p_type, size, sauce, cheese, topings,
-                           pizza_quantity, int(pizza_quantity) * unit_price)
+                           pizza_quantity, int(pizza_quantity) * unit_price,
+                           int(pizza_quantity) * prep_time)
         # adds the instance to the orders list
         orders_list.append(order)
 
@@ -708,6 +713,7 @@ def main():
         now = datetime.now(tz_dublin)
         order_hour = now.hour
         order_min = now.minute
+
         # add order refference to the orders refferences list
         orders_refference.append(generate_order_refference(orders_refference))
 
@@ -720,6 +726,9 @@ def main():
             os.system('cls' if os.name == 'nt' else "printf '\033c'")
             print(colored("Hope to see you soon!", "yellow"))
             print(order_date, str(order_hour) + ":" + str(order_min))
+            for order in orders_list:
+                # print preparation time plus oven time
+                print(order.prep_time + 15)
 
         break
 
