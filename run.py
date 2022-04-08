@@ -549,7 +549,7 @@ def generate_order_refference(orders_refference):
     return number
 
 
-def final_menu(refference):
+def final_menu(refference, duration):
     """
     Displays a sugestive message for user.
     A variable will memorise the user's input value representing the option for
@@ -559,6 +559,7 @@ def final_menu(refference):
 
     print("\033[1m" + "Thank you!" + "\033[0m \n")
     print("Your order refference is: " + colored(refference, "green") + "\n")
+    print("Estimated to be ready in: " + colored(duration, "blue") + "\n")
 
     while True:
         print("What do you want to do next?")
@@ -593,6 +594,53 @@ def get_total_price(orders_list):
         total += order.price
     total = round(total, 2)
     return total
+
+
+def get_total_duration(orders_list):
+    """
+    Calculate total duration for an order
+    For orders that include max 10 pizzas the duration is a sum
+    between total preparation time and 15 min in the oven considering
+    that the oven has a capacity of 10 pizzas
+    For orders that include more than 10 pizzas the duration is a sum
+    between total preparation time, 15 min in the oven and 10 min extra
+    per each additional pizza
+    """
+    duration = 0
+    quantity = 0
+    # get total number of pizzas in the order
+    for order in orders_list:
+        quantity += int(order.quantity)
+
+    # get total preparation time
+    for order in orders_list:
+        duration += order.prep_time
+
+    # add 15 minutes for oven cooking
+    duration += 15
+
+    # add extra time if there are more than 10 pizzas
+    if quantity > 10:
+        extra = (quantity - 10) * 10
+        duration += extra
+
+    return duration
+
+
+def get_duration_string(duration):
+    """
+    Return a string with the number of hours and minutes
+    representing the duration of the order
+    """
+    if duration > 60:
+        hours = int(duration / 60)
+        minutes = duration - (hours * 60)
+        if hours > 1:
+            return f"{hours} hours and {minutes} minutes"
+        else:
+            return f"{hours} hour and {minutes} minutes"
+    else:
+        return f"{duration} minutes"
 
 
 def main():
@@ -717,8 +765,14 @@ def main():
         # add order refference to the orders refferences list
         orders_refference.append(generate_order_refference(orders_refference))
 
+        # get total order duration in minutes
+        duration_in_minutes = get_total_duration(orders_list)
+
+        # get string format for duration
+        duration_string = get_duration_string(duration_in_minutes)
+
         # display order refference and final menu
-        final_menu_value = final_menu(orders_refference[0])
+        final_menu_value = final_menu(orders_refference[0], duration_string)
         if final_menu_value.upper() == "R":
             add_to_order = False
             continue
@@ -726,9 +780,7 @@ def main():
             os.system('cls' if os.name == 'nt' else "printf '\033c'")
             print(colored("Hope to see you soon!", "yellow"))
             print(order_date, str(order_hour) + ":" + str(order_min))
-            for order in orders_list:
-                # print preparation time plus oven time
-                print(order.prep_time + 15)
+            print(duration_in_minutes)
 
         break
 
