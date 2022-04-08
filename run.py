@@ -643,6 +643,27 @@ def get_duration_string(duration):
         return f"{duration} minutes"
 
 
+def update_orders(refference, orders_list, price, order_date, order_time,
+                  duration, status):
+    """
+    Receive a list of integers to be inserted into a orders worksheet
+    """
+    orders = SHEET.worksheet("orders")
+    data = []
+    data.append(refference)
+    order_description = ""
+    for order in orders_list:
+        order_description += order.get_string()
+        order_description += "\n"
+    data.append(order_description)
+    data.append(price)
+    data.append(order_date)
+    data.append(order_time)
+    data.append(duration)
+    data.append(status)
+    orders.append_row(data)
+
+
 def main():
     """
     Run all program functions
@@ -763,10 +784,17 @@ def main():
         order_min = now.minute
 
         # add order refference to the orders refferences list
-        orders_refference.append(generate_order_refference(orders_refference))
+        order_refference = generate_order_refference(orders_refference)
+        orders_refference.append(order_refference)
 
         # get total order duration in minutes
         duration_in_minutes = get_total_duration(orders_list)
+
+        # update orders worksheet
+        update_orders(order_refference, orders_list,
+                      get_total_price(orders_list),
+                      order_date, f"{str(order_hour)}:{str(order_min)}",
+                      duration_in_minutes, "Preparing")
 
         # get string format for duration
         duration_string = get_duration_string(duration_in_minutes)
