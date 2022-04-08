@@ -1,7 +1,9 @@
-import gspread
+from datetime import date, datetime
 import time
 import os
 import random
+import pytz
+import gspread
 from google.oauth2.service_account import Credentials
 from termcolor import colored
 from tabulate import tabulate
@@ -697,6 +699,15 @@ def main():
             add_to_order = False
             continue
 
+        # get today date
+        today = date.today()
+        order_date = today.strftime("%d/%m/%Y")
+
+        # get order time
+        tz_dublin = pytz.timezone('Europe/Dublin')
+        now = datetime.now(tz_dublin)
+        order_hour = now.hour
+        order_min = now.minute
         # add order refference to the orders refferences list
         orders_refference.append(generate_order_refference(orders_refference))
 
@@ -708,6 +719,7 @@ def main():
         else:
             os.system('cls' if os.name == 'nt' else "printf '\033c'")
             print(colored("Hope to see you soon!", "yellow"))
+            print(order_date, str(order_hour) + ":" + str(order_min))
 
         break
 
