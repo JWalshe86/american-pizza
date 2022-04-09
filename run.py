@@ -797,6 +797,11 @@ def main():
         now = datetime.now(tz_dublin)
         order_hour = now.hour
         order_min = now.minute
+        order_time = ""
+        if(order_min > 9):
+            order_time = f"{str(order_hour)}:{str(order_min)}"
+        else:
+            order_time = f"{str(order_hour)}:0{str(order_min)}"
 
         # get refferences from worksheet and generate a new one
         orders_refference = get_sheet_order_refference()
@@ -808,7 +813,7 @@ def main():
         # update orders worksheet
         update_orders(order_refference, orders_list,
                       get_total_price(orders_list),
-                      order_date, f"{str(order_hour)}:{str(order_min)}",
+                      order_date, order_time,
                       duration_in_minutes, "Preparing")
 
         # get string format for duration
