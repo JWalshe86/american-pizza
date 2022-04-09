@@ -163,7 +163,6 @@ def display_pizza_sizes():
           " Wich one do you preffer?" + "\033[0m \n")
 
     sizes = SHEET.worksheet("sizes")
-    # data = sizes.get_all_values()
 
     # define header names
     col_names = []
@@ -535,6 +534,20 @@ def get_sheet_values(p_type, size, custom_values):
         pizza_prep_time
 
 
+def get_sheet_order_refference():
+    """
+    Return a list with all the orders codes from the orders worksheet
+    """
+    orders = SHEET.worksheet("orders")
+    orders_list = orders.get_all_values()
+
+    refferences_list = []
+    for row in orders_list[1:]:
+        refferences_list.append(row[0])
+
+    return refferences_list
+
+
 def generate_order_refference(orders_refference):
     """
     Generate a random number between 0 and 1000 as order
@@ -543,9 +556,10 @@ def generate_order_refference(orders_refference):
     while True:
         number = random.randint(0, 1000)
         for value in orders_refference:
-            if value == number:
+            if int(value) == number:
                 continue
         break
+
     return number
 
 
@@ -646,7 +660,8 @@ def get_duration_string(duration):
 def update_orders(refference, orders_list, price, order_date, order_time,
                   duration, status):
     """
-    Receive a list of integers to be inserted into a orders worksheet
+    Receive integers and strings as parameters to be inserted into orders
+    worksheet
     """
     orders = SHEET.worksheet("orders")
     data = []
@@ -783,9 +798,9 @@ def main():
         order_hour = now.hour
         order_min = now.minute
 
-        # add order refference to the orders refferences list
+        # get refferences from worksheet and generate a new one
+        orders_refference = get_sheet_order_refference()
         order_refference = generate_order_refference(orders_refference)
-        orders_refference.append(order_refference)
 
         # get total order duration in minutes
         duration_in_minutes = get_total_duration(orders_list)
@@ -800,15 +815,13 @@ def main():
         duration_string = get_duration_string(duration_in_minutes)
 
         # display order refference and final menu
-        final_menu_value = final_menu(orders_refference[0], duration_string)
+        final_menu_value = final_menu(order_refference, duration_string)
         if final_menu_value.upper() == "R":
             add_to_order = False
             continue
         else:
             os.system('cls' if os.name == 'nt' else "printf '\033c'")
             print(colored("Hope to see you soon!", "yellow"))
-            print(order_date, str(order_hour) + ":" + str(order_min))
-            print(duration_in_minutes)
 
         break
 
