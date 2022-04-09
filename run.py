@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 import time
 import os
 import random
@@ -679,6 +679,28 @@ def update_orders(refference, orders_list, price, order_date, order_time,
     orders.append_row(data)
 
 
+def update_order_status():
+    """
+    Update status for the orders that overcome the estimated time
+    """
+    orders = SHEET.worksheet("orders")
+    orders_list = orders.get_all_values()
+
+    # get current time
+    tz_dublin = pytz.timezone('Europe/Dublin')
+    now = datetime.now(tz_dublin)
+    current_time = now.strftime("%H:%M")
+
+    for idx, row in enumerate(orders_list[1:]):
+        # convert sheet string time into datetime format
+        order_time = datetime.strptime(row[4], '%H:%M')
+        # add duration in minutes to order time
+        time_plus_duration = order_time + timedelta(minutes=int(row[5]))
+        # check if current time overcomes order time plus duration
+        if time_plus_duration < datetime.strptime(current_time, '%H:%M'):
+            orders.update_cell(idx + 2, 7, "Ready")
+
+
 def main():
     """
     Run all program functions
@@ -795,13 +817,7 @@ def main():
         # get order time
         tz_dublin = pytz.timezone('Europe/Dublin')
         now = datetime.now(tz_dublin)
-        order_hour = now.hour
-        order_min = now.minute
-        order_time = ""
-        if(order_min > 9):
-            order_time = f"{str(order_hour)}:{str(order_min)}"
-        else:
-            order_time = f"{str(order_hour)}:0{str(order_min)}"
+        order_time = now.strftime("%H:%M")
 
         # get refferences from worksheet and generate a new one
         orders_refference = get_sheet_order_refference()
@@ -827,6 +843,7 @@ def main():
         else:
             os.system('cls' if os.name == 'nt' else "printf '\033c'")
             print(colored("Hope to see you soon!", "yellow"))
+            update_order_status()
 
         break
 
