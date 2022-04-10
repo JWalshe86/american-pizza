@@ -2,6 +2,7 @@ from datetime import date, datetime, timedelta
 import time
 import os
 import random
+import itertools
 import pytz
 import gspread
 from google.oauth2.service_account import Credentials
@@ -588,8 +589,7 @@ def final_menu(refference, duration):
 
         if validate_data(user_data, ["L", "R", "E"], 1):
             if user_data[0].upper() == "L":
-                print("Live Orders\n\n")
-                time.sleep(1)
+                display_live_orders()
                 continue
             elif user_data[0].upper() == "P":
                 print("We get you back to pizza menu...")
@@ -699,6 +699,39 @@ def update_order_status():
         # check if current time overcomes order time plus duration
         if time_plus_duration < datetime.strptime(current_time, '%H:%M'):
             orders.update_cell(idx + 2, 7, "Ready")
+
+
+def display_live_orders():
+    """
+    It calls the method to update orders status and after it displays a
+    table with orders refferences for orders that are preparing and
+    orders that are ready
+    """
+
+    update_order_status()
+    orders = SHEET.worksheet("orders")
+    data = orders.get_all_values()
+
+    # define header names
+    col_names = ["Preparing", "Ready"]
+
+    # define table content
+    preparing_values = []
+    ready_values = []
+    for row in data[1:]:
+        if row[6] == "Preparing":
+            preparing_values.append(row[0])
+        else:
+            ready_values.append(row[0])
+
+    # combine the two lists with preparing and ready values
+    table_data = []
+    for combination in itertools.zip_longest(preparing_values, ready_values):
+        table_data.append(combination)
+
+    # print Live Orders Status table
+    print(tabulate(table_data, headers=col_names, tablefmt="fancy_grid") +
+          "\n\n")
 
 
 def main():
@@ -843,8 +876,6 @@ def main():
         else:
             os.system('cls' if os.name == 'nt' else "printf '\033c'")
             print(colored("Hope to see you soon!", "yellow"))
-            update_order_status()
-
         break
 
 
