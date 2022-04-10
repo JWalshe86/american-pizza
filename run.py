@@ -118,11 +118,12 @@ def display_pizza_menu(orders_list):
           "\n\n")
     while True:
         print("Please enter the code for your pizza choice"
-              " by choosing a number between 1 and 6" + "\n" + "OR")
-        print("\033[1m"+"(P) " + "\033[0m" + "to see what your order contains "
-              "until this moment\n")
+              " by choosing a number between " + "\n" + "1 and 6" + "\n" +
+              "OR")
+        print("\033[1m" + "(P) " + "\033[0m" + "to see what your order"
+              " contains until this moment\n")
         print("* You can only pick one pizza type at a time with the option to"
-              " add to your order later\n")
+              " add to " + "\n" + "your order later\n")
 
         pizza_type = input("\033[1m" + "Write your answer here:\n")
         print("\n")
@@ -452,7 +453,13 @@ def finalize_order(orders_list):
     print("\033[1m" + "You're almost ready!" + "\033[0m \n")
     print("Your order contains:")
     for order in orders_list:
-        print(colored(order.get_string(), "yellow"))
+        order_s = order.get_string()
+        if(len(order_s) > 80):
+            last_space_index = order_s[:80].rfind(" ")
+            order_s = order_s[:last_space_index + 1] + "\n" \
+                + order_s[last_space_index + 1:]
+        print(colored(" * " + order_s, "yellow"))
+
     print("Total price:")
     print(colored("€ " + f"{get_total_price(orders_list)}", "green"))
     print("\n")
