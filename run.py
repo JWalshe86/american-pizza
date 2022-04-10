@@ -93,6 +93,7 @@ def display_pizza_menu(orders_list):
     """
     os.system('cls' if os.name == 'nt' else "printf '\033c'")
 
+    print("\n")
     print("\033[1m" + "Welcome to " + colored('American pizza', 'green') +
           " !" + "\033[0m \n")
     print("Here is our" + "\033[1m" + " pizza menu " + "\033[0m" +
@@ -124,6 +125,7 @@ def display_pizza_menu(orders_list):
               " add to your order later\n")
 
         pizza_type = input("\033[1m" + "Write your answer here:\n")
+        print("\n")
 
         # creates a list with every value inserted by the user
         user_data = pizza_type.split(" ")
@@ -159,6 +161,7 @@ def display_pizza_sizes():
     """
     os.system('cls' if os.name == 'nt' else "printf '\033c'")
 
+    print("\n")
     print("\033[1m" + "Here is our catalogue for sizes and prices."
           " Wich one do you preffer?" + "\033[0m \n")
 
@@ -185,6 +188,7 @@ def display_pizza_sizes():
               " prices guide\n")
 
         pizza_size = input("\033[1m" + "Write your answer here:\n")
+        print("\n")
 
         # creates a list with every value inserted by the user
         user_data = pizza_size.split(" ")
@@ -210,6 +214,7 @@ def get_custom_pizza_sauce():
     """
     os.system('cls' if os.name == 'nt' else "printf '\033c'")
 
+    print("\n")
     print("\033[1m" + "This is the first step in creating your custom pizza." +
           "\nPlease choose an option for your sauce." + "\033[0m \n")
 
@@ -230,6 +235,7 @@ def get_custom_pizza_sauce():
         print("\033[1m"+"(R) " + "\033[0m" + "to restart your order\n")
 
         custom_pizza_sauce = input("\033[1m" + "Write your answer here:\n")
+        print("\n")
 
         # creates a list with every value inserted by the user
         user_data = custom_pizza_sauce.split(" ")
@@ -255,6 +261,7 @@ def get_custom_pizza_cheese():
     """
     os.system('cls' if os.name == 'nt' else "printf '\033c'")
 
+    print("\n")
     print("\033[1m" + "This is the second step in creating your " +
           "custom pizza.\nPlease choose an option for the cheese." +
           "\033[0m \n")
@@ -277,6 +284,7 @@ def get_custom_pizza_cheese():
         print("\033[1m"+"(R) " + "\033[0m" + "to restart your order\n")
 
         custom_pizza_cheese = input("\033[1m" + "Write your answer here:\n")
+        print("\n")
 
         # creates a list with every value inserted by the user
         user_data = custom_pizza_cheese.split(" ")
@@ -305,6 +313,7 @@ def get_custom_pizza_topings():
     """
     os.system('cls' if os.name == 'nt' else "printf '\033c'")
 
+    print("\n")
     print("\033[1m" + "This is the last step in creating your custom pizza." +
           "\nYou can choose up to 5 topings for your pizza" + "\033[0m \n")
 
@@ -327,6 +336,7 @@ def get_custom_pizza_topings():
         print("\033[1m"+"(R) " + "\033[0m" + "to restart your order\n")
 
         custom_pizza_topings = input("\033[1m" + "Write your answer here:\n")
+        print("\n")
 
         # creates a list with every value inserted by the user
         user_data = custom_pizza_topings.split(" ")
@@ -355,6 +365,7 @@ def get_pizza_quantity():
     """
     os.system('cls' if os.name == 'nt' else "printf '\033c'")
 
+    print("\n")
     print("\033[1m" + "Please insert the quantity that you want, " +
           "not more than 10" + "\033[0m \n")
 
@@ -363,6 +374,7 @@ def get_pizza_quantity():
         print("\033[1m"+"(R) " + "\033[0m" + "to restart your order\n")
 
         pizza_quantity = input("\033[1m" + "Write your answer here:\n")
+        print("\n")
 
         # creates a list with every value inserted by the user
         user_data = pizza_quantity.split(" ")
@@ -436,6 +448,7 @@ def finalize_order(orders_list):
     """
     os.system('cls' if os.name == 'nt' else "printf '\033c'")
 
+    print("\n")
     print("\033[1m" + "You're almost ready!" + "\033[0m \n")
     print("Your order contains:")
     for order in orders_list:
@@ -451,6 +464,7 @@ def finalize_order(orders_list):
         print("\033[1m" + "(R) " + "\033[0m" + "to restart your order\n")
 
         answer = input("\033[1m" + "Write your answer here:\n")
+        print("\n")
 
         # creates a list with every value inserted by the user
         user_data = answer.split(" ")
@@ -566,6 +580,7 @@ def final_menu(refference, duration):
     """
     os.system('cls' if os.name == 'nt' else "printf '\033c'")
 
+    print("\n")
     print("\033[1m" + "Thank you!" + "\033[0m \n")
     print("Your order refference is: " + colored(refference, "green") + "\n")
     print("Estimated to be ready in: " + colored(duration, "blue") + "\n")
@@ -577,6 +592,7 @@ def final_menu(refference, duration):
         print("\033[1m" + "(E) " + "\033[0m" + "exit program\n")
 
         answer = input("\033[1m" + "Write your answer here:\n")
+        print("\n")
 
         # creates a list with every value inserted by the user
         user_data = answer.split(" ")
