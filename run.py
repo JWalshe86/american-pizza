@@ -56,7 +56,7 @@ def validate_data(values, list_to_check, number_of_values_required):
             try:
                 int(value)
             except ValueError:
-                print("\n" + colored("Invalid data: ", "red") +
+                print("\n\n" + colored("Invalid data: ", "red") +
                       "Wrong numbers format, please try again.\n")
                 return False
             try:
@@ -65,7 +65,7 @@ def validate_data(values, list_to_check, number_of_values_required):
                         "We didn't recognised your value"
                     )
             except ValueError as error:
-                print("\n" + colored("Invalid data: ", "red") + f"{error}, "
+                print("\n\n" + colored("Invalid data: ", "red") + f"{error}, "
                       "please try again.\n")
                 return False
     # for exactly one value inserted by te user, raise error if value can't be
@@ -78,7 +78,7 @@ def validate_data(values, list_to_check, number_of_values_required):
                 )
         except ValueError as error:
             print(
-                "\n" + colored("Invalid data: ", "red") + f"{error}, "
+                "\n\n" + colored("Invalid data: ", "red") + f"{error}, "
                 "please try again.\n"
                 )
             return False
@@ -93,7 +93,6 @@ def display_pizza_menu(orders_list):
     """
     os.system('cls' if os.name == 'nt' else "printf '\033c'")
 
-    print("\n")
     print("\033[1m" + "Welcome to " + colored('American pizza', 'green') +
           " !" + "\033[0m\n")
     print("Here is our" + "\033[1m" + " pizza menu " + "\033[0m" +
@@ -123,8 +122,8 @@ def display_pizza_menu(orders_list):
         print("\033[1m" + "(P) " + "\033[0m" + "to see what your order"
               " contains until this moment\n")
 
-        pizza_type = input("\033[1m" + "Write your answer here:\n")
-
+        pizza_type = input("\033[1m" + "Write your answer here and pres Enter"
+                           " when you're ready:\n")
         # creates a list with every value inserted by the user
         user_data = pizza_type.split(" ")
 
@@ -185,8 +184,8 @@ def display_pizza_sizes():
         print("\033[1m"+"(B) " + "\033[0m" + "to go back to pizza sizes and" +
               " prices guide\n")
 
-        pizza_size = input("\033[1m" + "Write your answer here:\n")
-        print("\n")
+        pizza_size = input("\033[1m" + "Write your answer here and pres Enter"
+                           " when you're ready:\n")
 
         # creates a list with every value inserted by the user
         user_data = pizza_size.split(" ")
@@ -232,8 +231,8 @@ def get_custom_pizza_sauce():
         print("Enter a number between 1 and 3" + "\n" + "OR")
         print("\033[1m"+"(R) " + "\033[0m" + "to restart your order\n")
 
-        custom_pizza_sauce = input("\033[1m" + "Write your answer here:\n")
-        print("\n")
+        custom_pizza_sauce = input("\033[1m" + "Write your answer here and"
+                                   " pres Enter when you're ready:\n")
 
         # creates a list with every value inserted by the user
         user_data = custom_pizza_sauce.split(" ")
@@ -281,8 +280,8 @@ def get_custom_pizza_cheese():
         print("\033[1m"+"(B) " + "\033[0m" + "to go back to sauces options")
         print("\033[1m"+"(R) " + "\033[0m" + "to restart your order\n")
 
-        custom_pizza_cheese = input("\033[1m" + "Write your answer here:\n")
-        print("\n")
+        custom_pizza_cheese = input("\033[1m" + "Write your answer here and"
+                                    " pres Enter when you're ready:\n")
 
         # creates a list with every value inserted by the user
         user_data = custom_pizza_cheese.split(" ")
@@ -333,8 +332,8 @@ def get_custom_pizza_topings():
         print("\033[1m"+"(B) " + "\033[0m" + "to go back to cheese options")
         print("\033[1m"+"(R) " + "\033[0m" + "to restart your order\n")
 
-        custom_pizza_topings = input("\033[1m" + "Write your answer here:\n")
-        print("\n")
+        custom_pizza_topings = input("\033[1m" + "Write your answer here and"
+                                     " pres Enter when you're ready:\n")
 
         # creates a list with every value inserted by the user
         user_data = custom_pizza_topings.split(" ")
@@ -371,8 +370,8 @@ def get_pizza_quantity():
         print("Enter a number between 1 and 10" + "\n" + "OR")
         print("\033[1m"+"(R) " + "\033[0m" + "to restart your order\n")
 
-        pizza_quantity = input("\033[1m" + "Write your answer here:\n")
-        print("\n")
+        pizza_quantity = input("\033[1m" + "Write your answer here and"
+                               " pres Enter when you're ready:\n")
 
         # creates a list with every value inserted by the user
         user_data = pizza_quantity.split(" ")
@@ -387,7 +386,6 @@ def get_pizza_quantity():
                 time.sleep(1)
             else:
                 print("We get you to the next step...")
-                time.sleep(1)
             break
 
     return user_data[0]
@@ -467,8 +465,8 @@ def finalize_order(orders_list):
         print("\033[1m" + "(F) " + "\033[0m" + "to finish your order")
         print("\033[1m" + "(R) " + "\033[0m" + "to restart your order\n")
 
-        answer = input("\033[1m" + "Write your answer here:\n")
-        print("\n")
+        answer = input("\033[1m" + "Write your answer here and"
+                       " pres Enter when you're ready:\n")
 
         # creates a list with every value inserted by the user
         user_data = answer.split(" ")
@@ -476,7 +474,6 @@ def finalize_order(orders_list):
         if validate_data(user_data, ["A", "F", "R"], 1):
             if user_data[0].upper() == "F":
                 print("We process your order...")
-                time.sleep(1)
             else:
                 print("We get you back to pizza menu...")
                 time.sleep(1)
@@ -595,8 +592,8 @@ def final_menu(refference, duration):
         print("\033[1m" + "(R) " + "\033[0m" + "make another order")
         print("\033[1m" + "(E) " + "\033[0m" + "exit program\n")
 
-        answer = input("\033[1m" + "Write your answer here:\n")
-        print("\n")
+        answer = input("\033[1m" + "Write your answer here and"
+                       " pres Enter when you're ready:\n")
 
         # creates a list with every value inserted by the user
         user_data = answer.split(" ")
