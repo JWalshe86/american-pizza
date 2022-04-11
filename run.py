@@ -95,9 +95,9 @@ def display_pizza_menu(orders_list):
 
     print("\n")
     print("\033[1m" + "Welcome to " + colored('American pizza', 'green') +
-          " !" + "\033[0m \n")
+          " !" + "\033[0m\n")
     print("Here is our" + "\033[1m" + " pizza menu " + "\033[0m" +
-          "for today:\n\n")
+          "for today:")
 
     pizzas = SHEET.worksheet("pizzas")
     data = pizzas.get_all_values()
@@ -106,32 +106,29 @@ def display_pizza_menu(orders_list):
     col_names = data[0]
 
     # define menu content and set width for Ingredients column
-    menu_data = data[-6:]
+    menu_data = data[-4:]
     for row in menu_data:
-        if(len(row[2]) > 45):
-            last_space_index = row[2][:45].rfind(" ")
+        if(len(row[2]) > 60):
+            last_space_index = row[2][:60].rfind(" ")
             row[2] = row[2][:last_space_index + 1] + "\n" \
                 + row[2][last_space_index + 1:]
 
     # print pizza menu table
     print(tabulate(menu_data, headers=col_names, tablefmt="fancy_grid") +
-          "\n\n")
+          "\n")
     while True:
-        print("Please enter the code for your pizza choice"
-              " by choosing a number between " + "\n" + "1 and 6" + "\n" +
+        print("Please enter your choice (1-4). You can add to your order "
+              "later.\n" +
               "OR")
         print("\033[1m" + "(P) " + "\033[0m" + "to see what your order"
               " contains until this moment\n")
-        print("* You can only pick one pizza type at a time with the option to"
-              " add to " + "\n" + "your order later\n")
 
         pizza_type = input("\033[1m" + "Write your answer here:\n")
-        print("\n")
 
         # creates a list with every value inserted by the user
         user_data = pizza_type.split(" ")
 
-        if validate_data(user_data, ["1", "2", "3", "4", "5", "6", "P"], 1):
+        if validate_data(user_data, ["1", "2", "3", "4", "P"], 1):
             if user_data[0].upper() == "P":
                 if len(orders_list) == 0:
                     print(colored("You haven't added nothing to your order yet"
