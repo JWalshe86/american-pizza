@@ -93,7 +93,6 @@ def display_pizza_menu(orders_list):
     """
     os.system('cls' if os.name == 'nt' else "printf '\033c'")
 
-    print("\n")
     print("\033[1m" + "Welcome to " + colored('American pizza', 'green') +
           " !" + "\033[0m\n")
     print("Here is our" + "\033[1m" + " pizza menu " + "\033[0m" +
@@ -159,7 +158,6 @@ def display_pizza_sizes():
     """
     os.system('cls' if os.name == 'nt' else "printf '\033c'")
 
-    print("\n")
     print("\033[1m" + "Here is our catalogue for sizes and prices."
           " Wich one do you preffer?" + "\033[0m \n")
 
