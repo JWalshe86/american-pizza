@@ -122,7 +122,7 @@ def display_pizza_menu(orders_list):
         print("\033[1m" + "(P) " + "\033[0m" + "to see what your order"
               " contains until this moment\n")
 
-        pizza_type = input("\033[1m" + "Write your answer here and pres Enter"
+        pizza_type = input("\033[1m" + "Write your answer here and press Enter"
                            " when you're ready:\n")
         # creates a list with every value inserted by the user
         user_data = pizza_type.split(" ")
@@ -184,7 +184,7 @@ def display_pizza_sizes():
         print("\033[1m"+"(B) " + "\033[0m" + "to go back to pizza sizes and" +
               " prices guide\n")
 
-        pizza_size = input("\033[1m" + "Write your answer here and pres Enter"
+        pizza_size = input("\033[1m" + "Write your answer here and press Enter"
                            " when you're ready:\n")
 
         # creates a list with every value inserted by the user
@@ -232,7 +232,7 @@ def get_custom_pizza_sauce():
         print("\033[1m"+"(R) " + "\033[0m" + "to restart your order\n")
 
         custom_pizza_sauce = input("\033[1m" + "Write your answer here and"
-                                   " pres Enter when you're ready:\n")
+                                   " press Enter when you're ready:\n")
 
         # creates a list with every value inserted by the user
         user_data = custom_pizza_sauce.split(" ")
@@ -281,7 +281,7 @@ def get_custom_pizza_cheese():
         print("\033[1m"+"(R) " + "\033[0m" + "to restart your order\n")
 
         custom_pizza_cheese = input("\033[1m" + "Write your answer here and"
-                                    " pres Enter when you're ready:\n")
+                                    " press Enter when you're ready:\n")
 
         # creates a list with every value inserted by the user
         user_data = custom_pizza_cheese.split(" ")
@@ -333,7 +333,7 @@ def get_custom_pizza_topings():
         print("\033[1m"+"(R) " + "\033[0m" + "to restart your order\n")
 
         custom_pizza_topings = input("\033[1m" + "Write your answer here and"
-                                     " pres Enter when you're ready:\n")
+                                     " press Enter when you're ready:\n")
 
         # creates a list with every value inserted by the user
         user_data = custom_pizza_topings.split(" ")
@@ -371,7 +371,7 @@ def get_pizza_quantity():
         print("\033[1m"+"(R) " + "\033[0m" + "to restart your order\n")
 
         pizza_quantity = input("\033[1m" + "Write your answer here and"
-                               " pres Enter when you're ready:\n")
+                               " press Enter when you're ready:\n")
 
         # creates a list with every value inserted by the user
         user_data = pizza_quantity.split(" ")
@@ -466,7 +466,7 @@ def finalize_order(orders_list):
         print("\033[1m" + "(R) " + "\033[0m" + "to restart your order\n")
 
         answer = input("\033[1m" + "Write your answer here and"
-                       " pres Enter when you're ready:\n")
+                       " press Enter when you're ready:\n")
 
         # creates a list with every value inserted by the user
         user_data = answer.split(" ")
@@ -593,7 +593,7 @@ def final_menu(refference, duration):
         print("\033[1m" + "(E) " + "\033[0m" + "exit program\n")
 
         answer = input("\033[1m" + "Write your answer here and"
-                       " pres Enter when you're ready:\n")
+                       " press Enter when you're ready:\n")
 
         # creates a list with every value inserted by the user
         user_data = answer.split(" ")
@@ -762,7 +762,7 @@ def display_live_orders():
         print("\033[1m" + "(E) " + "\033[0m" + "exit program\n")
 
         answer = input("\033[1m" + "Write your answer here and"
-                       " pres Enter when you're ready:\n")
+                       " press Enter when you're ready:\n")
 
         # creates a list with every value inserted by the user
         user_data = answer.split(" ")
