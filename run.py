@@ -740,7 +740,7 @@ def display_live_orders():
     for row in data[1:]:
         if row[6] == "Preparing":
             preparing_values.append(row[0])
-        else:
+        elif row[6] == "Ready":
             ready_values.append(row[0])
 
     # combine the two lists with preparing and ready values
@@ -749,8 +749,10 @@ def display_live_orders():
         table_data.append(combination)
 
     # print Live Orders Status table
-    print(tabulate(table_data, headers=col_names, tablefmt="fancy_grid") +
-          "\n\n")
+    print(tabulate(table_data, headers=col_names, tablefmt="fancy_grid"))
+    print("* The orders that are ready to be collected will be shown " +
+          "\non the table for another three hours")
+    print("\n\n")
 
 
 def main():
