@@ -600,8 +600,8 @@ def final_menu(refference, duration):
 
         if validate_data(user_data, ["L", "R", "E"], 1):
             if user_data[0].upper() == "L":
-                display_live_orders()
-                continue
+                print("We generate Live Orders Status...")
+                time.sleep(1)
             elif user_data[0].upper() == "P":
                 print("We get you back to pizza menu...")
                 time.sleep(1)
@@ -726,6 +726,7 @@ def display_live_orders():
     table with orders refferences for orders that are preparing and
     orders that are ready
     """
+    os.system('cls' if os.name == 'nt' else "printf '\033c'")
 
     update_order_status()
     orders = SHEET.worksheet("orders")
@@ -753,6 +754,29 @@ def display_live_orders():
     print("* The orders that are ready to be collected will be shown " +
           "\non the table for another three hours")
     print("\n\n")
+
+    while True:
+        print("What do you want to do next?")
+        print("\033[1m" + "(L) " + "\033[0m" + "check live orders")
+        print("\033[1m" + "(R) " + "\033[0m" + "make another order")
+        print("\033[1m" + "(E) " + "\033[0m" + "exit program\n")
+
+        answer = input("\033[1m" + "Write your answer here and"
+                       " pres Enter when you're ready:\n")
+
+        # creates a list with every value inserted by the user
+        user_data = answer.split(" ")
+
+        if validate_data(user_data, ["L", "R", "E"], 1):
+            if user_data[0].upper() == "L":
+                print("We generate Live Orders Status...")
+                time.sleep(1)
+            elif user_data[0].upper() == "P":
+                print("We get you back to pizza menu...")
+                time.sleep(1)
+            break
+
+    return user_data[0]
 
 
 def main():
@@ -891,9 +915,24 @@ def main():
 
         # display order refference and final menu
         final_menu_value = final_menu(order_refference, duration_string)
-        if final_menu_value.upper() == "R":
+        if final_menu_value.upper() == "L":
+            # display live orders
+            live_orders_menu_value = display_live_orders().upper()
+            while live_orders_menu_value == "L":
+                live_orders_menu_value = display_live_orders().upper()
+            # start the program again if the user press R
+            if live_orders_menu_value == "R":
+                add_to_order = False
+                continue
+            # end the program if the user press E
+            else:
+                os.system('cls' if os.name == 'nt' else "printf '\033c'")
+                print(colored("Hope to see you soon!", "yellow"))
+        # start the program again if the user press R
+        elif final_menu_value.upper() == "R":
             add_to_order = False
             continue
+        # end the program if the user press E
         else:
             os.system('cls' if os.name == 'nt' else "printf '\033c'")
             print(colored("Hope to see you soon!", "yellow"))
