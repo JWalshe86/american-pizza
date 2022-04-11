@@ -93,6 +93,7 @@ def display_pizza_menu(orders_list):
     """
     os.system('cls' if os.name == 'nt' else "printf '\033c'")
 
+    print("\n")
     print("\033[1m" + "Welcome to " + colored('American pizza', 'green') +
           " !" + "\033[0m\n")
     print("Here is our" + "\033[1m" + " pizza menu " + "\033[0m" +
@@ -105,7 +106,7 @@ def display_pizza_menu(orders_list):
     col_names = data[0]
 
     # define menu content and set width for Ingredients column
-    menu_data = data[-4:]
+    menu_data = data[-5:]
     for row in menu_data:
         if(len(row[2]) > 45):
             last_space_index = row[2][:45].rfind(" ")
@@ -116,7 +117,7 @@ def display_pizza_menu(orders_list):
     print(tabulate(menu_data, headers=col_names, tablefmt="fancy_grid") +
           "\n")
     while True:
-        print("Please enter your choice (1-4). You can add to your order "
+        print("Please enter your choice (1-5). You can add to your order "
               "later.\n" +
               "OR")
         print("\033[1m" + "(P) " + "\033[0m" + "to see what your order"
@@ -127,7 +128,7 @@ def display_pizza_menu(orders_list):
         # creates a list with every value inserted by the user
         user_data = pizza_type.split(" ")
 
-        if validate_data(user_data, ["1", "2", "3", "4", "P"], 1):
+        if validate_data(user_data, ["1", "2", "3", "4", "5", "P"], 1):
             if user_data[0].upper() == "P":
                 if len(orders_list) == 0:
                     print(colored("You haven't added nothing to your order yet"
@@ -158,6 +159,7 @@ def display_pizza_sizes():
     """
     os.system('cls' if os.name == 'nt' else "printf '\033c'")
 
+    print("\n")
     print("\033[1m" + "Here is our catalogue for sizes and prices."
           " Wich one do you preffer?" + "\033[0m \n")
 
