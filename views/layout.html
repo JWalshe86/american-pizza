@@ -12,10 +12,15 @@
     <style>
         body {
             font-family: Arial;
-            background-image: url("../assets/images/background_image.jpg");
+
+        }
+
+        #main-container {
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
+            height: 100vh;
         }
 
         /**
@@ -172,6 +177,11 @@
     </style>
 </head>
 
-@{body}
+<body>
+    <main id="main-container">
+        <img src="../assets/images/background_image.jpg" alt="">
+        @{body}
+    </main>
+</body>
 
 </html>
