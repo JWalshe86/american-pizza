@@ -700,15 +700,23 @@ def update_order_status():
     # get current time
     tz_dublin = pytz.timezone('Europe/Dublin')
     now = datetime.now(tz_dublin)
-    current_time = now.strftime("%H:%M")
+    current_time = now.strftime("%d/%m/%Y %H:%M")
 
     for idx, row in enumerate(orders_list[1:]):
+        order_date_time = row[3] + " " + row[4]
         # convert sheet string time into datetime format
-        order_time = datetime.strptime(row[4], '%H:%M')
+        order_time = datetime.strptime(order_date_time, "%d/%m/%Y %H:%M")
         # add duration in minutes to order time
         time_plus_duration = order_time + timedelta(minutes=int(row[5]))
-        # check if current time overcomes order time plus duration
-        if time_plus_duration < datetime.strptime(current_time, '%H:%M'):
+        # check if current time overcomes order ready time with three hours
+        # and update status
+        if time_plus_duration + timedelta(hours=3) < datetime.strptime(
+                                         current_time, "%d/%m/%Y %H:%M"):
+            orders.update_cell(idx + 2, 7, "Finished")
+        # check if current time overcomes order time plus duration and update
+        # status
+        elif time_plus_duration < datetime.strptime(current_time,
+                                                    "%d/%m/%Y %H:%M"):
             orders.update_cell(idx + 2, 7, "Ready")
 
 
@@ -813,7 +821,7 @@ def main():
             pizza_size = display_pizza_sizes()
 
         # gets pizza custom values codes if user choose 6
-        if pizza_type == "6":
+        if pizza_type == "5":
             custom_pizza_values = get_values_for_custom_pizza()
 
             # restart loop
