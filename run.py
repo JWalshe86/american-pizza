@@ -108,8 +108,8 @@ def display_pizza_menu(orders_list):
     # define menu content and set width for Ingredients column
     menu_data = data[-4:]
     for row in menu_data:
-        if(len(row[2]) > 60):
-            last_space_index = row[2][:60].rfind(" ")
+        if(len(row[2]) > 45):
+            last_space_index = row[2][:45].rfind(" ")
             row[2] = row[2][:last_space_index + 1] + "\n" \
                 + row[2][last_space_index + 1:]
 
