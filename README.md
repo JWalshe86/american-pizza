@@ -32,4 +32,22 @@ The fully deployed project can be accesed at [this link](https://american-pizza-
 * As a user, I want to be assigned a code for my order<br>
 * As a user, I want to check my order status<br>
 
+### SCOPE<br>
+For the implementation of the ordering system I have planned the following features:
 
+* Data from spreadsheet about pizzas characteristics to be displayed to the user in tables
+* The Create Your Own pizza option that adds extra steps for the order
+* The user's options will be writen on the screen
+* The program displays warnings when the input of the user doesn't respect the format
+* The option of displaying the order content 
+* The program calculates and displays the order total price
+* The program calculates and displays the order total duration
+* The program assign a number refference to the order
+* A table with the orders status can be displayed
+
+### STRUCTURE<br>
+The ordering system can be used by the clients through a mock terminal that appears when the link is accessed.
+The terminal was created using the Code Institute template which is not my work but his <code>CSS</code> code has been adjusted to conform it's design with the restaurant theme.
+Apart from that, the program was made with <code>Python</code> as the only programming language used. The file which stores the entire code that appears in the terminal is named <code>run.py</code> and this is what Heroku will run when the program is used.
+
+ 
