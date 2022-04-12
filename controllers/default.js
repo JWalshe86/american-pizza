@@ -58,15 +58,3 @@ if (process.env.CREDS != null) {
         }
     });
 }
-
-const mediaQuery = window.matchMedia('(max-width: 749px)');
-if (mediaQuery.matches) {
-    let container = document.createElement("div")
-    container.setAttribute("id", "mobile-container")
-    container.style.padding = "10px"
-    container.style.textAlign = "center"
-    let warning = document.createElement("p")
-    warning.innerText = "Sorry!\nThis content is not available for devices under 750px"
-    container.appendChild(warning)
-    document.getElementById("terminal").appendChild(container);
-}
