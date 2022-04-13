@@ -453,10 +453,11 @@ def finalize_order(orders_list):
             last_space_index = order_s[:80].rfind(" ")
             order_s = order_s[:last_space_index + 1] + "\n" \
                 + order_s[last_space_index + 1:]
-        print(colored(" * " + order_s, "yellow"))
+        print(colored("\033[1m" + " * " + order_s + "\033[0m", "yellow"))
 
     print("Total price:")
-    print(colored("€ " + f"{get_total_price(orders_list)}", "green"))
+    print(colored("\033[1m" + "€ " + f"{get_total_price(orders_list)}" +
+                  "\033[0m", "green"))
     print("\n")
 
     while True:
@@ -583,8 +584,10 @@ def final_menu(refference, duration):
 
     print("\n")
     print("\033[1m" + "Thank you!" + "\033[0m \n")
-    print("Your order refference is: " + colored(refference, "green") + "\n")
-    print("Estimated to be ready in: " + colored(duration, "blue") + "\n")
+    print("Your order refference is: " + colored("\033[1m" + str(refference) +
+          "\033[0m", "green") + "\n")
+    print("Estimated to be ready in: " + colored("\033[1m" + duration +
+          "\033[0m", "blue") + "\n")
 
     while True:
         print("What do you want to do next?")
@@ -927,7 +930,8 @@ def main():
             # end the program if the user press E
             else:
                 os.system('cls' if os.name == 'nt' else "printf '\033c'")
-                print(colored("Hope to see you soon!", "yellow"))
+                print(colored("\033[1m" + "Hope to see you soon!" +
+                              "\033[0m", "yellow"))
         # start the program again if the user press R
         elif final_menu_value.upper() == "R":
             add_to_order = False
@@ -935,7 +939,8 @@ def main():
         # end the program if the user press E
         else:
             os.system('cls' if os.name == 'nt' else "printf '\033c'")
-            print(colored("Hope to see you soon!", "yellow"))
+            print(colored("\033[1m" + "Hope to see you soon!" +
+                          "\033[0m", "yellow"))
         break
 
 
