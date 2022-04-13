@@ -125,7 +125,7 @@ The program has multiple features that were implemented to help the client and t
     <img src="assets/images/time.JPG" width="40%">
 
 * When the user choose to finish the order, a new line with all the order's details is inserted in the Orders Worksheet to keep a good track of them every day.<br>
-    <img src="assets/images/new_line.JPG" width="90%">
+    <img src="assets/images/new_line.JPG" >
 
 * The last feature I have implemented it gives the client the possibility to chech his order status by relating to his given refference. Every time a client wants to see the live orders, the Worksheet first updates the status for each order then it displays a table with the right values.<br>
     <img src="assets/images/live_status.JPG" width="60%">
