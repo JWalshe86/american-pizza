@@ -93,3 +93,46 @@ If the user choose the option of Create Your Own pizza, three more aditional ste
 * As an aditional step every user can access a Live Status table that updates its values every time it is loaded.<br>
 <img src="assets/images/status.JPG" width="80%"><br>
 <hr>
+
+## FEATURES
+### EXISTING FEATURES<br>
+The program has multiple features that were implemented to help the client and the restaurant owner as well. For simulating a real life experience, the system is linked to a <b>Google Spreedsheet</b> that can be accessed [here](https://docs.google.com/spreadsheets/d/1DBQfkHd9fv4RQxQV-SxT5p1I38P6pLeuPQtpLCS1Axg/edit?usp=sharing).<br><br>
+
+* The program displays real time informations about curent menu and pizza details in the form of a table by requesting data from the spreadsheet every time it is loaded. <br>
+    <img src="assets/images/table1.JPG" width="60%">
+    <img src="assets/images/table2.JPG" width="38%">
+    <img src="assets/images/table3.JPG" width="35%">
+    <img src="assets/images/table4.JPG" width="35%">
+    <img src="assets/images/table5.JPG" width="40%"><br>
+
+* For a good user experience and to not risk breaking the program, I have implemented a feature that validates the user's input and gives him the right feedback.<br>
+    <img src="assets/images/warning1.JPG" width="70%">
+    <img src="assets/images/warning2.JPG" width="70%">
+    <img src="assets/images/warning3.JPG" width="70%">
+    <img src="assets/images/valid.png" width="30%">
+
+* The client has the possibility to see an overview of the order before processing it and on the first page in case he choses to add more pizzas type.<br>
+    <img src="assets/images/overview1.JPG" width="60%">
+    <img src="assets/images/overview2.JPG" width="35%">
+
+* The total price is calculated for every order by multipling the quantity with the unit price for the specific size of the pizza chosen, and it is displayed as a part of the order overview before processing it.<br>
+    <img src="assets/images/price.JPG" width="35%">
+
+* Every order is given a refference to be used by the client when he checks his order status. This code is generated as a unique random number between 0 and 1000. <br>
+    <img src="assets/images/refference.JPG" width="40%">
+
+* Another important feature is the estimated time for the order which is calculated by multipling the quantity with each pizza's time for preparation and adding 15 minutes for the oven cooking and 10 minutes for each extra pizza over the quantity of 10.<br>
+    <img src="assets/images/time.JPG" width="40%">
+
+* When the user choose to finish the order, a new line with all the order's details is inserted in the Orders Worksheet to keep a good track of them every day.<br>
+    <img src="assets/images/new_line.JPG" width="90%">
+
+* The last feature I have implemented it gives the client the possibility to chech his order status by relating to his given refference. Every time a client wants to see the live orders, the Worksheet first updates the status for each order then it displays a table with the right values.<br>
+    <img src="assets/images/live_status.JPG" width="60%">
+
+
+### FUTURE FEATURES<br>
+* Create an user-friendly interface for the program that will facilitate the process of ordering.
+* Update the algorithm that calculates the estimated time for preparing the order because at the moment it doesn't consider the orders that are already in preparation and could delay the time for the last orders to be done. 
+
+<hr>
