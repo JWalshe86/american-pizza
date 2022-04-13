@@ -136,3 +136,51 @@ The program has multiple features that were implemented to help the client and t
 * Update the algorithm that calculates the estimated time for preparing the order because at the moment it doesn't consider the orders that are already in preparation and could delay the time for the last orders to be done. 
 
 <hr>
+
+# BUGS OR ERRORS
+* During the developing of the project I have encountered a few problems when writing and testing the feature that updates the status for each order in the Google Spreedsheet because there were multiple bugs when trying to work with string and date and time type of values.
+This feature calculates if the estimated duration for the order added to the time it was registered has overcome the current time to updates it's status from "Preparing" to "Ready", and if the overcoming time is more than three hours, the status will be "Finished".
+Event if when I tested it worked properly, I noticed that the algorithm doesn't consider the date of the order as well and it didn't updated the orders of the previous days as well.
+The solution was to create a date and time type of variable with values from the Date and Time columns and compare them with a current date and time afer adding the duration. 
+<hr>
+
+
+
+
+## DEPLOYMENT
+### CREATING THE WEBSITE
+I have used the [Code Institute Python Essentials Template](https://github.com/Code-Institute-Org/python-essentials-template) for creating a terminal where the my Python code will generate it's output.
+The steps were as following:
+- Click the <i>Use this template</i> button
+- A New Repository page will appear, write a Repository name and a short description and press <i>Create repository from template</i>
+- Press the green Gitpod button to create your project workspace and start developing your website<br></br>
+  
+### DEPLOYING ON HEROKU
+After finishing developing the program I deployed it on <b>Heroku</b> following the instructions:
+- Create an account and login into [Heroku](https://id.heroku.com/login) website
+- Click "New -> Create new app" button
+- Insert your app's Name and Choose your region then click "Create App" button
+- Into the <i>Settings</i> tab go to "Config vars" section and click "Reveal Config Vars"
+- Enter the PORT in KEY section and 8000 for it's value, then click "Add" 
+- Go to "Buildpacks" section and click "Add buildpack"</br>
+- Firstly add the <b>Python</b> buildpack then <b>NodeJs</b>
+- Into the <i>Deploy</i> tab go to "Deployment method" and select <b>Github</b>
+- After that go to "App connected to GitHub" and look for your github repository name to link it
+- You can now choose to either manually or automatically deploy your app to Heroku.
+- With automatic deploys enabled, Heroku will build a new version of the app each time a change has been pushed to the repository
+- Manual deploys means your app will be updated only when you manualy click to deploy it
+- When the deploying is finished, a link will be provided to you for accessing your app
+
+### FORK THE REPOSITORY 
+For creating a copy of the repository on your account and change it without affecting the original project, use<b>Fork</b> directly from GitHub:
+- On [My Repository Page](https://github.com/useriasminna/mistik-events), press <i>Fork</i> in the top right of the page
+- A forked version of my project will appear in your own repository<br></br>
+
+### CLONE THE REPOSITORY
+For creating a clone of the repository on your local machine, use<b>Clone</b>:
+- On [My Repository Page](https://github.com/useriasminna/mistik-events), click the <i>Code</i> green button, right above the code window
+- Chose from <i>HTTPS, SSH and GitClub CLI</i> format and copy (preferably <i>HTTPS</i>)
+- In your <i>IDE</i> open <i>Git Bash</i>
+- Enter the command <code>git clone</code> followed by the copied URL
+- Your clone was created
+<hr>
