@@ -137,7 +137,7 @@ The program has multiple features that were implemented to help the client and t
 
 <hr>
 
-# BUGS OR ERRORS
+## BUGS OR ERRORS
 * During the developing of the project I have encountered a few problems when writing and testing the feature that updates the status for each order in the Google Spreedsheet because there were multiple bugs when trying to work with string and date and time type of values.
 This feature calculates if the estimated duration for the order added to the time it was registered has overcome the current time to updates it's status from "Preparing" to "Ready", and if the overcoming time is more than three hours, the status will be "Finished".
 Event if when I tested it worked properly, I noticed that the algorithm doesn't consider the date of the order as well and it didn't updated the orders of the previous days as well.
@@ -145,6 +145,16 @@ The solution was to create a date and time type of variable with values from the
 <hr>
 
 
+## MODULES IMPORTED
+* <b>google.oauth2.service_account</b> for using the<code> Credentials </code> function on "creds.json" file that was used to link the program with the Google spreadsheet using the <b>gspread</b> module
+* <b>os</b> module was imported for accessing <code>os.system</code> to clear the terminal
+* <b>time</b> is the module used for delaying the feedback for the user with <code>time.sleep()</code>
+* <b>datetime</b> module was very useful when needed to convert strings into datetime format with <code>datetime.strptime()</code>
+* <b>random</b> is the module utilised for generating the order refference as a number between 1 and 1000 with <code>random.randint()</code>
+* <b>itertools</b> module helped me iterate through two lists of different lengths with <code> itertools.zip_longest()</code>
+* <b>pytz</b> was used for memorising the local timezone with <code>pytz.timezone()</code>
+* From <b>termcolor</b> module I imported <code>colored</code> for printing text in different colors
+* <b>tabulate</b> module imported the <code>tabulate</code> function for printing the tables
 
 
 ## DEPLOYMENT
@@ -183,4 +193,26 @@ For creating a clone of the repository on your local machine, use<b>Clone</b>:
 - In your <i>IDE</i> open <i>Git Bash</i>
 - Enter the command <code>git clone</code> followed by the copied URL
 - Your clone was created
+<hr>
+
+## CREDITS
+* The code for clear the terminal was taken from [stackoverflow](https://stackoverflow.com/questions/2084508/clear-terminal-in-python)
+* I learned how to work with date and time strings from [educative.io](https://www.educative.io/edpresso/how-to-convert-a-string-to-a-date-in-python)
+* The code for linking to the Google Spreadsheet and manipulate it was taken and adapted from the Code Institute Love Sandwiches tutorial
+  
+<hr>
+
+## TOOLS
+[GitHub](https://github.com/) - used for hosting the source code of the program<br>
+[Gitpod Dev Environment](https://gitpod.io/) - used for testing the program<br>
+[PEP8 Validator](http://pep8online.com/) - used for validating the python code<br>
+[Heroku](https://dashboard.heroku.com/) - used for deploying the project<br>
+[LucidChart](https://www.lucidchart.com/) - used for creating the Flowchart
+[Favicon.io](https://favicon.io/) - used for generating the website favicon<br>
+[Diffchecker](https://www.diffchecker.com/) - used for comparing the code<br>
+
+## ACKNOWLEDGEMENTS
+- Code Institute for all the material and support offered<br>
+- My mentor Ben Kavanagh for great tips and his willingness to help me as much as possible with the problems encountered during the development of the project<br>
+- Slack community for great involvement in helping each other<br>
 <hr>
