@@ -19,37 +19,37 @@ The whole website was tested and its free from errors in CSS.
 <img src="assets/images/css_valid.JPG" width="70%">
 
 ### Lighthouse 
-I generated a lighthouse report to check my performance and the scores are good. The lower score for the SEO is caused by the lack of the meta description.
+I generated a lighthouse report to check my performance and the scores are good. The lower score for the SEO is caused by the lack of meta description.
 <img src="assets/images/lighthouse.JPG" width="90%">
 <hr>
 
 ## USER STORIES TESTING
-<b>User Story: </b>As a user, I want to see informations about the pizza options that the restaurant offer<br>
-<b>Outcome: </b> All the necessary informations for completing an order are displayed to the user in tables. The data is pulled from the Google spreadsheet where the menu and prices are updated manually by the owner of the restaurant. There are available for the clients tables with the menu of the day, sizes available, prices and for custom pizza the client can choose from a range of ingredients available. This user story is accomplished because the clients have all the necessary informations at their disposal. <br><br>
-<b>User Story: </b>As a user, I want be able to create my own custom pizza<br>
-<b>Outcome: </b>Every client has the possibility to choose from a range of pizza types or create his own custom pizza by entering "5" in the first page input place. What this action does is adding three more extra steps to the process of ordering, for choosing the sauce, cheese and topings for the custom pizza. This user story was tested and fulfilled. All the steps are coming in order, in a logical way, and the custom pizza is added to the order with a full description for the cook to see it. <br><br>
-<b>User Story: </b>As a user, I want to be able to add more type of pizzas to my order<br>
-<b>Outcome: </b>At the end of the order process, the client is given the option to add more pizza types to the order by entering "A" in the order overview page. This action will redirect the user to the first page of the order, with the current pizza menu, and will guide him through the whole process again. <br>
+<b>User Story: </b>As a user, I want to see information about the pizza options that the restaurant offer<br>
+<b>Outcome: </b> All the necessary information for completing an order is displayed to the user in tables. The data is pulled from the Google spreadsheet where the menu and prices are updated manually by the owner of the restaurant. There are available for the clients, tables with the menu of the day, sizes available, prices and for custom pizza, the client can choose from a range of ingredients available. This user story is accomplished because the clients have all the necessary information at their disposal. <br><br>
+<b>User Story: </b>As a user, I want to be able to create my own custom pizza<br>
+<b>Outcome: </b>Every client can choose from a range of pizza types or create his own custom pizza by entering "5" in the first-page input place. What this action does is add three more extra steps to the process of ordering, for choosing the sauce, cheese and toppings for the custom pizza. This user story was tested and fulfilled. All the steps are coming in order, logically, and the custom pizza is added to the order with a full description for the cook to see it. <br><br>
+<b>User Story: </b>As a user, I want to be able to add more types of pizzas to my order<br>
+<b>Outcome: </b>At the end of the order process, the client is given the option to add more pizza types to the order by entering "A" on the order overview page. This action will redirect the user to the first page of the order, with the current pizza menu, and will guide him through the whole process again. <br>
 This action can be done as many times as the client wishes.<br>
-All the food that is added will be visible in the overview for the client to decide if he wants to add more or finish the order. After processing the order, a total description with all the food that was added will be inserted into the Google Spreedsheet.<br>
+All the food that is added will be visible in the overview for the client to decide if he wants to add more or finish the order. After processing the order, a total description of all the food that was added will be inserted into the Google Spreadsheet.<br>
 This user story is accomplished<br><br>
 <b>User Story: </b>As a user, I want to see the content of my order when deciding to add more food.<br>
-<b>Outcome: </b>Apart from the overview that is displayed to the user at the end of the ordering process, in the first page there is available for the clients the option to look once more through the content of their orders because there is no other option of going back to the overview.<br>
-By entering "P", a list with the pizza's quantity, name and ingredients by case will be visible to the clients that already added something in their "shopping cart" and a sugestive string otherwise.<br>
-The clients need for being able to see their order content for making their decision of buying easier was identified and this user story was respected.<br><br>
+<b>Outcome: </b>Apart from the overview that is displayed to the user at the end of the ordering process, on the first page there is available for the clients the option to look once more through the content of their orders because there is no other option of going back to the overview.<br>
+By entering "P", a list with the pizza's quantity, name and ingredients by case will be visible to the clients that already added something in their "shopping cart" and a suggestive string otherwise.<br>
+The clients' need for being able to see their order content for making their decision of buying easier was identified and this user story was respected.<br><br>
 <b>User Story: </b>As a user, I want to be able to choose the quantity for each pizza<br>
-<b>Outcome: </b>As a final stape, any client can add a quantity between 1 and 10 for each pizza type they added. This value will be memorised and added to the description of the order. Also this value is taking in consider when calculating the price and the order's duration.<br>
-This user story was tested and is successfully accomplished because it also helped at reducing the number of steps for the client and making his buying experience better.<br><br>
-<b>User Story: </b>As a user, I want to see informations about the total price and duration of the order<br>
-<b>Outcome: </b>For an order to be complete, I identified the need of seeing details about price and duration, to help the customers make the best decision when ordering, and reduce the risk of unpaid orders because of unsitisfied clients.<br>
+<b>Outcome: </b>As a final stape, any client can add a quantity between 1 and 10 for each pizza type they added. This value will be memorised and added to the description of the order. Also, this value is taken into consideration when calculating the price and the order's duration.<br>
+This user story was tested and is accomplished because it also helped at reducing the number of steps for the client and make his buying experience better.<br><br>
+<b>User Story: </b>As a user, I want to see information about the total price and duration of the order<br>
+<b>Outcome: </b>For an order to be complete, I identified the need of seeing details about price and duration, to help the customers make the best decision when ordering, and to reduce the risk of unpaid orders because of unsatisfied clients.<br>
 The price is visible to the user before making the final decision of finishing the order, to give him the chance of making changes to it if he wants to. After the order is processed, an estimated time for the whole order to be ready is displayed.<br>
-After many tests, it resulted that these values are corrrectly calculated and they contributed at accomplishing this user story.<br><br>
+After many tests, it resulted that these values are correctly calculated and they contributed to accomplishing this user story.<br><br>
 <b>User Story: </b>As a user, I want to be assigned a code for my order<br>
-<b>Outcome: </b>It is essential for the client to identify his order and this user story was accomplished by assigning a number refference for each order. I considered that this option would be more suitable than requesting personal data as name, phone number and others.<br>
-This number is what makes the client and the cookers recognise the order and it is used as a refference when checking the status of it. At the end of every order, this unique code is displayed to the user in blue color to make it more visible<br><br>
+<b>Outcome: </b>It is essential for the client to identify his order and this user story was accomplished by assigning a number of reference for each order. I considered that this option would be more suitable than requesting personal data like name, phone number and others.<br>
+This number is what makes the client and the cookers recognise the order and it is used as a reference when checking its status. At the end of every order, this unique code is displayed to the user in blue colour to make it more visible<br><br>
 <b>User Story: </b>As a user, I want to check my order status<br>
-<b>Outcome: </b>The program was implemented to satisfy this clients need for improving their experience with American Pizza restaurant.<br>
-In the final menu any client can choose to see the orders status by entering "L". A table with orders code refferences appear with values from the Google spreadsheet and it separates the them in two columns, "Preparing" and "Ready". The statuses are updated every time this request is made by any client and can also be changed manually in the spreadsheet, by a cooker or any authorized personal. This helps mentaining a real time status for each order. This user story was tested and succesfully accomplished.<br><br>
+<b>Outcome: </b>The program was implemented to satisfy these clients' need for improving their experience with American Pizza restaurant.<br>
+In the final menu, any client can choose to see the status of the order by entering "L". A table with orders code references appear with values from the Google spreadsheet and it separates them into two columns, "Preparing" and "Ready". The statuses are updated every time this request is made by any client and can also be changed manually in the spreadsheet, by a cooker or by any authorized staff. This helps maintain a real-time status for each order. This user story was tested and successfully accomplished.<br><br>
 
 ## FEATURES TESTING
 
@@ -62,9 +62,9 @@ In the final menu any client can choose to see the orders status by entering "L"
     <img src="assets/images/table1_updated.JPG" width="60%">
 
 * <b>Input validation at every step</b><br>
-  I have implemented the <code>validate_data()</code> method that is called at every step in the ordering process for validating the input of the user. This method can be adapted to any kind of requirements for the user's input by changing it's paremeters values.<br>
+  I have implemented the <code>validate_data()</code> method that is called at every step in the ordering process for validating the input of the user. This method can be adapted to any kind of requirements for the user's input by changing the values of its parameters.<br>
   The <code>values</code> paremeter gets the list with the user's entered values, <code>list_to_check</code> is for setting the values that are accepted as a response and <code>number_of_values_required</code> is the number of values requested. <br>
-  This feature was tested by simulating client's different entered values to see what is the output.<br><br>
+  This feature was tested by simulating the client's different entered values to see what is the output.<br><br>
 
   -The user enters a values that doesn't respect the format.<br>
     <b>Prameters values:</b> <code>values</code> = ["1"], <code>list_to_check</code> = ["S", "M", "L", "B"], <code>number_of_values_required</code> = 1<br>
