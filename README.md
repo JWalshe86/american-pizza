@@ -144,6 +144,8 @@ Event if when I tested it worked properly, I noticed that the algorithm doesn't 
 The solution was to create a date and time type of variable with values from the Date and Time columns and compare them with a current date and time afer adding the duration. 
 <hr>
 
+## TESTING
+The testing can be found at [TESTING.md](TESTING.md).
 
 ## MODULES IMPORTED
 * <b>google.oauth2.service_account</b> for using the<code> Credentials </code> function on "creds.json" file that was used to link the program with the Google spreadsheet using the <b>gspread</b> module
@@ -210,6 +212,8 @@ For creating a clone of the repository on your local machine, use<b>Clone</b>:
 [LucidChart](https://www.lucidchart.com/) - used for creating the Flowchart
 [Favicon.io](https://favicon.io/) - used for generating the website favicon<br>
 [Diffchecker](https://www.diffchecker.com/) - used for comparing the code<br>
+[HTML - W3C HTML Validator](https://validator.w3.org/#validate_by_uri+with_options) - used for validating the HTML<br>
+[CSS - Jigsaw CSS Validator](https://jigsaw.w3.org/css-validator/#validate_by_uri) - used for validating the CSS<br>
 
 ## ACKNOWLEDGEMENTS
 - Code Institute for all the material and support offered<br>
