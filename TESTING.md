@@ -38,7 +38,7 @@ This user story is accomplished<br><br>
 By entering "P", a list with the pizza's quantity, name and ingredients by case will be visible to the clients that already added something in their "shopping cart" and a suggestive string otherwise.<br>
 The clients' need for being able to see their order content for making their decision of buying easier was identified and this user story was respected.<br><br>
 <b>User Story: </b>As a user, I want to be able to choose the quantity for each pizza<br>
-<b>Outcome: </b>As a final stape, any client can add a quantity between 1 and 10 for each pizza type they added. This value will be memorised and added to the description of the order. Also, this value is taken into consideration when calculating the price and the order's duration.<br>
+<b>Outcome: </b>As a final step, any client can add a quantity between 1 and 10 for each pizza type they added. This value will be memorised and added to the description of the order. Also, this value is taken into consideration when calculating the price and the order's duration.<br>
 This user story was tested and is accomplished because it also helped at reducing the number of steps for the client and make his buying experience better.<br><br>
 <b>User Story: </b>As a user, I want to see information about the total price and duration of the order<br>
 <b>Outcome: </b>For an order to be complete, I identified the need of seeing details about price and duration, to help the customers make the best decision when ordering, and to reduce the risk of unpaid orders because of unsatisfied clients.<br>
