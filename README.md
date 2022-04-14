@@ -134,7 +134,7 @@ The program has multiple features that were implemented to help the client and t
 ### FUTURE FEATURES<br>
 * Create an user-friendly interface for the program that will facilitate the process of ordering.
 * Update the algorithm that calculates the estimated time for preparing the order because at the moment it doesn't consider the orders that are already in preparation and could delay the time for the last orders to be done. 
-
+* Implementing a secured card payment feature and the requesting of a completed payment code for cash payments cases, before processing the order. This feature should prevent unpleased situations of unpaid orders, but firstly should come in help of the client by giving him more payment options.
 <hr>
 
 ## BUGS OR ERRORS
