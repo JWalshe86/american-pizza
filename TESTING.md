@@ -52,3 +52,34 @@ This number is what makes the client and the cookers recognise the order and it 
 In the final menu any client can choose to see the orders status by entering "L". A table with orders code refferences appear with values from the Google spreadsheet and it separates the them in two columns, "Preparing" and "Ready". The statuses are updated every time this request is made by any client and can also be changed manually in the spreadsheet, by a cooker or any authorized personal. This helps mentaining a real time status for each order. This user story was tested and succesfully accomplished.<br><br>
 
 ## FEATURES TESTING
+
+* <b>Real time informations requested from the Google SpreadSheet</b><br>
+  -This feature was tested by comparing the output from the terminal with the content that exists at that moment in the corresponding worksheet. <br>
+    <img src="assets/images/menu_excel.JPG" width="95%">
+    <img src="assets/images/table1.JPG" width="90%"><br><br>
+  -Also, this was tested by changing values in the worksheet and the terminal prints the coresponding content.  <br>
+    <img src="assets/images/menu_updated_excel.JPG" width="95%">
+    <img src="assets/images/table1_updated.JPG" width="90%">
+
+* <b>Input validation at every step</b><br>
+  I have implemented the <code>validate_data()</code> method that is called at every step in the ordering process for validating the input of the user. This method can be adapted to any kind of requirements for the user's input by changing it's paremeters values.<br>
+  The <code>values</code> paremeter gets the list with the user's entered values, <code>list_to_check</code> is for setting the values that are accepted as a response and <code>number_of_values_required</code> is the number of values requested. <br>
+  This feature was tested by simulating client's different entered values to see what is the output.<br><br>
+
+  -The user enters a values that doesn't respect the format.<br>
+    <b>Prameters values:</b> <code>values</code> = ["1"], <code>list_to_check</code> = ["S", "M", "L", "B"], <code>number_of_values_required</code> = 1<br>
+    <b>Output:</b><br>
+    <img src="assets/images/invalid1.JPG" width="90%"><br><br>
+  -In most cases only one value is accepted. Here the client inserts more than 1 value.<br>
+    <b>Prameters values:</b> <code>values</code> = ["S", "M", "L", "1"], <code>list_to_check</code> = ["S", "M", "L", "B"], <code>number_of_values_required</code> = 1<br>
+    <b>Output:</b>
+    <img src="assets/images/invalid2.JPG" width="100%"><br><br>
+  -At the "Topings" step, the client cannot choose more than five values. In this case there were more than five values inserted.<br>
+    <b>Prameters values:</b> <code>values</code> = ["1", "2", "3", "4", "5", "6"], <code>list_to_check</code> = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "B", "R"], <code>number_of_values_required</code> = 5<br>
+    <b>Output:</b>   
+    <img src="assets/images/invalid3.JPG" width="100%"><br><br>
+  -For the case were the user's input is valid, a sugestive message is displayed to tell him the process continues. I decided to not make the input case sensitive for an easier experience.<br>
+    <b>Prameters values:</b> <code>values</code> = ["S"], <code>list_to_check</code> = ["S", "M", "L", "B"], <code>number_of_values_required</code> = 1<br>
+    <b>Output:</b><br> 
+    <img src="assets/images/valid1.png" width="80%">
+    <img src="assets/images/valid2.png" width="80%">
