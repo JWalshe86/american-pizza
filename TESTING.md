@@ -83,3 +83,56 @@ In the final menu, any client can choose to see the status of the order by enter
     <b>Output:</b><br> 
     <img src="assets/images/valid1.png" width="60%">
     <img src="assets/images/valid2.png" width="60%">
+
+* <b>Order overview</b><br>
+  In my Python code, a <code>PizzaOrder</code> object is created after choosing the quantity for a pizza type. This object is added to <code>orders_list</code> and every other object that is created after choosing to add more to the same order. That means that all the pizzas of a client's order can be found in that list. If the client wishes to restart the order the list is emptied.
+  This is how the client can see an overview of his order before it is finished.<br>
+  -I tested this feature to see if the overview of the end of the orders corresponds with my chosen options.<br><br>
+  These are my options:<br>
+    <img src="assets/images/option1.JPG" width="60%">
+    <img src="assets/images/option2.JPG" width="60%">
+    <img src="assets/images/option3.JPG" width="60%"><br><br>
+  -This is the overview at the end of the ordering process:<br>
+    <img src="assets/images/output.JPG" width="40%"><br><br> 
+  -If I enter "A" to add to my order I am redirected to the Menu page. Here I can check my order content if I insert "P". The content coresponds with what I have chosen.<br>
+    <img src="assets/images/output2.JPG" width="65%"><br><br>  
+  -If I would have entered "R" for restarting order, instead of "A", the output would have been as it follows:<br>
+      <img src="assets/images/output3.JPG" width="65%"><br><br>
+
+* <b>Total price</b><br>
+  Before finishing the order, the client can see the total price of it. The unit prices are taken from the list of sizes for pizzas. For every order, the total price is calculated by summing all the prices values resulting from the multiplication of quantity with the corresponding unit price.<br>
+  I manually tested this feature to check the resulted values and they are correct.
+    <img src="assets/images/sizes.JPG" width="70%">
+    <img src="assets/images/valid_price.JPG" width="40%">
+
+* <b>Order Reference</b><br>
+  Every client gets an order reference after completing it. This is represented by a code generated with the <code>generate_order_refference()</code> method. What is very important is for the code to be unique and that's why every random number that it's generated it's after compared with all the codes values that already exist in the spreadsheet to avoid duplicates.<br>
+  This feature was tested to see if the reference for each order is unique and it passed.
+    <img src="assets/images/valid_reference.JPG" width="50%">
+    <img src="assets/images/reference_excell.JPG" width="60%">
+
+* <b>Estimated time</b>
+  This value is calculated by <code>get_total_duration()</code> method which multiply the quantity with each pizza's time for preparation and adds 15 minutes for the oven cooking and another 10 minutes for each extra pizza over the quantity of 10. The time for preparation can be found in the Sizes workseeht.<br>
+  I have developed this algorithm trying to simulate a real life context in which the restaurant's oven has a capacity of ten pizzas at a time.<br>
+  This feature was manually tested and it works properly (4 * 7 + 15 = 43).<br>
+    <img src="assets/images/sizes_excel.JPG" width="80%">
+    <img src="assets/images/output.JPG" width="40%">
+    <img src="assets/images/valid_time.JPG" width="55%">
+
+* <b>Orders Worksheet update</b><br>
+  Every time the client enters "F" for finish the order, <code>update_orders()</code> method is called.<br>
+  This feature successfully passed. 
+    <img src="assets/images/valid_new_line.JPG" >
+
+* <b>Check Live Orders Status</b>
+ This feature gives the client the possibility to check his order status by relating to his given reference value. Every time a client enters "L" for checking orders status, <code>update_order_status()</code> method is called first then a table is displayed.<br>
+ For testing this features I represented how <code>update_order_status()</code> works and how the values from the table are printed.<br><br>
+  -Considering this was the current date and time when the request for the orders status has been made by entering "L" in the terminal :<br>
+    <img src="assets/images/current_time.JPG" width="30%"><br><br>
+  -The initial state of the spreadsheet was this :   
+    <img src="assets/images/initial_status.JPG" width="100%"><br><br>
+  -After <code>update_order_status()</code> method was called the orders' states changed after the next formula:
+  <b>All the orders that overcome the time of ordering plus duration get a status of "Ready" and the ones which overcomes with more than three hours get a status of "Finished", assuming that every order is initially set to "Preparing" </b>     
+    <img src="assets/images/updated_status_excel.JPG" width="100%"><br><br>
+  -The resulted table only displays the refferences for "Preparing" and "Ready" status  
+    <img src="assets/images/final_status.JPG" width="65%">
