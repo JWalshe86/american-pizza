@@ -14,10 +14,10 @@ SCOPE = [
     "https://www.googleapis.com/auth/drive",
 ]
 
-# CREDS = Credentials.from_service_account_file("creds.json")
-# SCOPED_CREDS = CREDS.with_scopes(SCOPE)
-# GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
-# SHEET = GSPREAD_CLIENT.open("pizza_ordering_system_data")
+CREDS = Credentials.from_service_account_file("creds.json")
+SCOPED_CREDS = CREDS.with_scopes(SCOPE)
+GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
+SHEET = GSPREAD_CLIENT.open("pizza_ordering_system_data")
 # link to order sheet
 MENU = SHEET.worksheet("menu")
 # all the order sheet data
