@@ -1,947 +1,408 @@
-from datetime import date, datetime, timedelta
-import time
+"""Module used here to cls terminal screen"""
 import os
+import time
 import random
-import itertools
-import pytz
 import gspread
+import pyfiglet
 from google.oauth2.service_account import Credentials
-from termcolor import colored
 from tabulate import tabulate
+from termcolor import colored
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive.file",
-    "https://www.googleapis.com/auth/drive"
-    ]
+    "https://www.googleapis.com/auth/drive",
+]
 
-
-CREDS = Credentials.from_service_account_file('creds.json')
+CREDS = Credentials.from_service_account_file("creds.json")
 SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
-SHEET = GSPREAD_CLIENT.open('american_pizza_order_system')
+SHEET = GSPREAD_CLIENT.open("pizza_ordering_system_data")
+# link to order sheet
+MENU = SHEET.worksheet("menu")
+# all the order sheet data
+MENU_DATA = MENU.get_all_values()
+
+# Active Global Variables
+CURRENT_ORDER = []
+TOTAL_COST = []
+QUANT_PIZZA_HOLDER = []
+CART_DISPLAY = []
+
+INITIAL_SCREEN_DISPLAY_HAS_RUN = False
+
+# Taken from https://stackoverflow.com/
+# questions/517970/how-to-clear-the-interpreter-console
 
 
-def validate_data(values, list_to_check, number_of_values_required):
+def cls():
+    """function which allows os clear function to work on both vscode
+    and heroku. os.system('cls') only works in vscode and os.system('clear')
+    only works in heroku. Thus the following if else
+    expression is required for inter dependence.
     """
-    This function checks if the values provided by the user in the values
-    parameter meet the requirements about the number_of_values_required.
-    Also checks if their format is correct and can be found in list_to_check
-    provided by the user when the function is called.
-    If any of the requirements is not respected it throws an error to inform
-    the user.
-    """
-    try:
-        # raise error if user enters a number of values
-        # different than the number required
-        if number_of_values_required == 1:
-            if(len(values) > 1):
-                raise ValueError(
-                    f"Exactly 1 value required, you provided {len(values)}"
-                )
-        else:
-            if(len(values) > 5):
-                raise ValueError(
-                    "You can not choose more than 5 topings"
-                )
-    except ValueError as error:
-        print("\n" + colored("Invalid data: ", "red") + f"{error}, please try"
-              " again.\n")
-        return False
-    # for 1 to 5 values inserted by the user, raise error if there is any
-    # value that can not be converted into int or if any value can't be found
-    # in the list provided
-    if(len(values) > 1):
-        for value in values:
-            try:
-                int(value)
-            except ValueError:
-                print("\n\n" + colored("Invalid data: ", "red") +
-                      "Wrong numbers format, please try again.\n")
-                return False
-            try:
-                if value.upper() not in list_to_check:
-                    raise ValueError(
-                        "We didn't recognised your value"
-                    )
-            except ValueError as error:
-                print("\n\n" + colored("Invalid data: ", "red") + f"{error}, "
-                      "please try again.\n")
-                return False
-    # for exactly one value inserted by te user, raise error if value can't be
-    # found in the list provided
-    else:
-        try:
-            if values[0].upper() not in list_to_check:
-                raise ValueError(
-                    "We didn't recognised your value"
-                )
-        except ValueError as error:
-            print(
-                "\n\n" + colored("Invalid data: ", "red") + f"{error}, "
-                "please try again.\n"
-                )
-            return False
-    return True
-
-
-def display_pizza_menu(orders_list):
-    """
-    Displays a welcome message and the pizza menu for the user.
-    A variable will memorise the user's input value representing
-    the pizza's code for the order
-    """
-    os.system('cls' if os.name == 'nt' else "printf '\033c'")
-
-    print("\033[1m" + "Welcome to " + colored('American pizza', 'green') +
-          " !" + "\033[0m\n")
-    print("Here is our" + "\033[1m" + " pizza menu " + "\033[0m" +
-          "for today:")
-
-    pizzas = SHEET.worksheet("pizzas")
-    data = pizzas.get_all_values()
-
-    # define header names
-    col_names = data[0]
-
-    # define menu content and set width for Ingredients column
-    menu_data = data[-5:]
-    for row in menu_data:
-        if(len(row[2]) > 45):
-            last_space_index = row[2][:45].rfind(" ")
-            row[2] = row[2][:last_space_index + 1] + "\n" \
-                + row[2][last_space_index + 1:]
-
-    # print pizza menu table
-    print(tabulate(menu_data, headers=col_names, tablefmt="fancy_grid") +
-          "\n")
-    while True:
-        print("Please enter your choice (1-5). You can add to your order "
-              "later.\n" +
-              "OR")
-        print("\033[1m" + "(P) " + "\033[0m" + "to see what your order"
-              " contains until this moment\n")
-
-        pizza_type = input("\033[1m" + "Write your answer here and press Enter"
-                           " when you're ready:\n")
-        # creates a list with every value inserted by the user
-        user_data = pizza_type.split(" ")
-
-        if validate_data(user_data, ["1", "2", "3", "4", "5", "P"], 1):
-            if user_data[0].upper() == "P":
-                if len(orders_list) == 0:
-                    print(colored("You haven't added nothing to your order yet"
-                                  "\n\n", "yellow"))
-                    time.sleep(1)
-                    continue
-                else:
-                    print("Your order contains:")
-                    for order in orders_list:
-                        print(colored(order.get_string(), "yellow"))
-                        print("\n\n")
-                        time.sleep(1)
-                    continue
-
-            print("We get you to the next step...")
-            time.sleep(1)
-            break
-
-    return user_data[0]
-
-
-def display_pizza_sizes():
-    """
-    Displays a sugestive message for user and the pizza catalogue for sizes and
-    prices.
-    A variable will memorise the user's input value representing the chosen
-    size for the pizza.
-    """
-    os.system('cls' if os.name == 'nt' else "printf '\033c'")
-
-    print("\n")
-    print("\033[1m" + "Here is our catalogue for sizes and prices."
-          " Wich one do you preffer?" + "\033[0m \n")
-
-    sizes = SHEET.worksheet("sizes")
-
-    # define header names
-    col_names = []
-    for ind in range(1, 5):
-        column = sizes.col_values(ind)
-        col_names.append(column[0])
-
-    # define sizes catalogue data
-    sizes_data = []
-    for ind in range(2, 5):
-        row = sizes.row_values(ind)
-        sizes_data.append(row[:4])
-
-    print(tabulate(sizes_data, headers=col_names, tablefmt="fancy_grid") +
-          "\n\n")
-    while True:
-        print("Please enter the code for your pizza size choice (S, M, L)" +
-              "\n" + "OR")
-        print("\033[1m"+"(B) " + "\033[0m" + "to go back to pizza sizes and" +
-              " prices guide\n")
-
-        pizza_size = input("\033[1m" + "Write your answer here and press Enter"
-                           " when you're ready:\n")
-
-        # creates a list with every value inserted by the user
-        user_data = pizza_size.split(" ")
-
-        if validate_data(user_data, ["S", "M", "L", "B"], 1):
-            if user_data[0].upper() == "B":
-                print("We get you back to pizza menu...")
-                time.sleep(1)
-            else:
-                print("We get you to the next step...")
-                time.sleep(1)
-            break
-
-    return user_data[0]
-
-
-def get_custom_pizza_sauce():
-    """
-    Displays a sugestive message for user and the sauces catalogue as the
-    first step in creating a custom pizza.
-    A variable will memorise the user's input value representing the chosen
-    sauce for the custom pizza.
-    """
-    os.system('cls' if os.name == 'nt' else "printf '\033c'")
-
-    print("\n")
-    print("\033[1m" + "This is the first step in creating your custom pizza." +
-          "\nPlease choose an option for your sauce." + "\033[0m \n")
-
-    sauces = SHEET.worksheet("sauces")
-    data = sauces.get_all_values()
-
-    # define header names
-    col_names = data[0]
-
-    # define sizes catalogue data
-    sauces_data = data[-3:]
-
-    # print sauces table
-    print(tabulate(sauces_data, headers=col_names, tablefmt="fancy_grid") +
-          "\n\n")
-    while True:
-        print("Enter a number between 1 and 3" + "\n" + "OR")
-        print("\033[1m"+"(R) " + "\033[0m" + "to restart your order\n")
-
-        custom_pizza_sauce = input("\033[1m" + "Write your answer here and"
-                                   " press Enter when you're ready:\n")
-
-        # creates a list with every value inserted by the user
-        user_data = custom_pizza_sauce.split(" ")
-
-        if validate_data(user_data, ["1", "2", "3", "R"], 1):
-            if user_data[0].upper() == "R":
-                print("We get you back to pizza menu...")
-                time.sleep(1)
-            else:
-                print("We get you to the next step...")
-                time.sleep(1)
-            break
-
-    return user_data[0]
-
-
-def get_custom_pizza_cheese():
-    """
-    Displays a sugestive message for user and the options for cheese
-    in a table as the second step in creating a custom pizza.
-    A variable will memorise the user's input value representing the chosen
-    cheese option for the custom pizza.
-    """
-    os.system('cls' if os.name == 'nt' else "printf '\033c'")
-
-    print("\n")
-    print("\033[1m" + "This is the second step in creating your " +
-          "custom pizza.\nPlease choose an option for the cheese." +
-          "\033[0m \n")
-
-    cheese = SHEET.worksheet("cheese")
-    data = cheese.get_all_values()
-
-    # define header names
-    col_names = data[0]
-
-    # define sizes catalogue data
-    cheese_data = data[-2:]
-
-    # print cheese table
-    print(tabulate(cheese_data, headers=col_names, tablefmt="fancy_grid") +
-          "\n\n")
-    while True:
-        print("Choose between the options 1 and 2" + "\n" + "OR")
-        print("\033[1m"+"(B) " + "\033[0m" + "to go back to sauces options")
-        print("\033[1m"+"(R) " + "\033[0m" + "to restart your order\n")
-
-        custom_pizza_cheese = input("\033[1m" + "Write your answer here and"
-                                    " press Enter when you're ready:\n")
-
-        # creates a list with every value inserted by the user
-        user_data = custom_pizza_cheese.split(" ")
-
-        if validate_data(user_data, ["1", "2", "B", "R"], 1):
-            if user_data[0].upper() == "B":
-                print("We get you back to sauces options...")
-                time.sleep(1)
-            elif user_data[0].upper() == "R":
-                print("We get you back to pizza menu...")
-                time.sleep(1)
-            else:
-                print("We get you to the next step...")
-                time.sleep(1)
-            break
-
-    return user_data[0]
-
-
-def get_custom_pizza_topings():
-    """
-    Displays a sugestive message for user and the options for topings
-    in a table as the last step in creating a custom pizza.
-    A variable will memorise the user's input value representing the chosen
-    topings for the custom pizza.
-    """
-    os.system('cls' if os.name == 'nt' else "printf '\033c'")
-
-    print("\n")
-    print("\033[1m" + "This is the last step in creating your custom pizza." +
-          "\nYou can choose up to 5 topings for your pizza" + "\033[0m \n")
-
-    topings = SHEET.worksheet("topings")
-    data = topings.get_all_values()
-
-    # define header names
-    col_names = data[0]
-
-    # define sizes catalogue data
-    topings_data = data[-10:]
-
-    # print topings table
-    print(tabulate(topings_data, headers=col_names, tablefmt="fancy_grid") +
-          "\n\n")
-    while True:
-        print("Enter numbers between 1 and 10 separated by spaces, " +
-              "not more than five." + "\n" + "OR")
-        print("\033[1m"+"(B) " + "\033[0m" + "to go back to cheese options")
-        print("\033[1m"+"(R) " + "\033[0m" + "to restart your order\n")
-
-        custom_pizza_topings = input("\033[1m" + "Write your answer here and"
-                                     " press Enter when you're ready:\n")
-
-        # creates a list with every value inserted by the user
-        user_data = custom_pizza_topings.split(" ")
-
-        if validate_data(user_data, ["1", "2", "3", "4", "5", "6", "7", "8",
-                                     "9", "10", "B", "R"], 5):
-            if user_data[0].upper() == "B":
-                print("We get you back to cheese options...")
-                time.sleep(1)
-            elif user_data[0].upper() == "R":
-                print("We get you back to pizza menu...")
-                time.sleep(1)
-            else:
-                print("We get you to the next step...")
-                time.sleep(1)
-            break
-
-    return user_data
-
-
-def get_pizza_quantity():
-    """
-    Displays a sugestive message for user.
-    A variable will memorise the user's input value representing the chosen
-    quantity for the pizza.
-    """
-    os.system('cls' if os.name == 'nt' else "printf '\033c'")
-
-    print("\n")
-    print("\033[1m" + "Please insert the quantity that you want, " +
-          "not more than 10" + "\033[0m \n")
-
-    while True:
-        print("Enter a number between 1 and 10" + "\n" + "OR")
-        print("\033[1m"+"(R) " + "\033[0m" + "to restart your order\n")
-
-        pizza_quantity = input("\033[1m" + "Write your answer here and"
-                               " press Enter when you're ready:\n")
-
-        # creates a list with every value inserted by the user
-        user_data = pizza_quantity.split(" ")
-
-        if validate_data(user_data, ["1", "2", "3", "4", "5", "6", "7", "8",
-                                     "9", "10", "R"], 1):
-            if user_data[0].upper() == "B":
-                print("We get you back to pizza sizes and prices guide...")
-                time.sleep(1)
-            elif user_data[0].upper() == "R":
-                print("We get you to back to pizza menu...")
-                time.sleep(1)
-            else:
-                print("We get you to the next step...")
-            break
-
-    return user_data[0]
-
-
-def get_values_for_custom_pizza():
-    """
-    This function is called when the user choose 'Create your own' type
-    for pizza order. It calls three methods coresponding to the three
-    steps for custom pizza: sauce, cheese, topings.
-    These methods are called in while loops to give the user the possibility
-    to get back to the previous step.
-    """
-    values = []
-    # gets pizza sauce code
-    custom_pizza_sauce = get_custom_pizza_sauce()
-    if custom_pizza_sauce.upper() == "R":
-        values.append("restart")
-        return values
-    else:
-        values.append(custom_pizza_sauce.upper())
-
-    # gets pizza cheese code
-    custom_pizza_cheese = get_custom_pizza_cheese()
-    while custom_pizza_cheese.upper() == "B":
-        custom_pizza_sauce = get_custom_pizza_sauce()
-        custom_pizza_cheese = get_custom_pizza_cheese()
-    if custom_pizza_cheese.upper() == "R":
-        values.append("restart")
-        return values
-    else:
-        values.append(custom_pizza_cheese.upper())
-
-    # gets pizza topings codes
-    custom_pizza_topings = get_custom_pizza_topings()
-    while custom_pizza_topings[0].upper() == "B":
-        custom_pizza_cheese = get_custom_pizza_cheese()
-        while custom_pizza_cheese.upper() == "B":
-            custom_pizza_sauce = get_custom_pizza_sauce()
-            custom_pizza_cheese = get_custom_pizza_cheese()
-        custom_pizza_topings = get_custom_pizza_topings()
-    if custom_pizza_topings[0].upper() == "R":
-        values.append("restart")
-        return values
-    else:
-        values.append(custom_pizza_topings)
-
-    return values
-
-
-def finalize_order(orders_list):
-    """
-    Displays a sugestive message for user.
-    A variable will memorise the user's input value representing the option for
-    adding, finishing or restarting the order.
-    """
-    os.system('cls' if os.name == 'nt' else "printf '\033c'")
-
-    print("\n")
-    print("\033[1m" + "You're almost ready!" + "\033[0m \n")
-    print("Your order contains:")
-    for order in orders_list:
-        order_s = order.get_string()
-        if(len(order_s) > 80):
-            last_space_index = order_s[:80].rfind(" ")
-            order_s = order_s[:last_space_index + 1] + "\n" \
-                + order_s[last_space_index + 1:]
-        print(colored("\033[1m" + " * " + order_s + "\033[0m", "yellow"))
-
-    print("Total price:")
-    print(colored("\033[1m" + "€ " + f"{get_total_price(orders_list)}" +
-                  "\033[0m", "green"))
-    print("\n")
-
-    while True:
-        print("Please choose one of the options bellow:")
-        print("\033[1m" + "(A) " + "\033[0m" + "to add to your order")
-        print("\033[1m" + "(F) " + "\033[0m" + "to finish your order")
-        print("\033[1m" + "(R) " + "\033[0m" + "to restart your order\n")
-
-        answer = input("\033[1m" + "Write your answer here and"
-                       " press Enter when you're ready:\n")
-
-        # creates a list with every value inserted by the user
-        user_data = answer.split(" ")
-
-        if validate_data(user_data, ["A", "F", "R"], 1):
-            if user_data[0].upper() == "F":
-                print("We process your order...")
-            else:
-                print("We get you back to pizza menu...")
-                time.sleep(1)
-            break
-
-    return user_data[0]
-
-
-def get_sheet_values(p_type, size, custom_values):
-    """
-    This function returns the string values from the sheets
-    as names coresponding to codes inserted by the user
-    """
-    # acces every worksheet from american_pizza_order_system sheet
-    pizzas = SHEET.worksheet("pizzas")
-    sizes = SHEET.worksheet("sizes")
-    sauces = SHEET.worksheet("sauces")
-    cheese = SHEET.worksheet("cheese")
-    topings = SHEET.worksheet("topings")
-
-    # get all values from every worksheet
-    pizzas_data = pizzas.get_all_values()
-    sizes_data = sizes.get_all_values()
-    sauces_data = sauces.get_all_values()
-    cheese_data = cheese.get_all_values()
-    topings_data = topings.get_all_values()
-
-    # get pizza type name
-    pizza_type_string = " "
-    for row in pizzas_data[-6:]:
-        if row[0] == p_type:
-            pizza_type_string = row[1]
-
-    # get pizza size name
-    pizza_size_string = " "
-    pizza_price = 0
-    for row in sizes_data[-3:]:
-        if row[0] == size.upper():
-            pizza_size_string = row[1]
-            pizza_price = float(row[3])
-            pizza_prep_time = int(row[4])
-
-    pizza_sauce_string = " "
-    pizza_cheese_string = " "
-    pizza_topings_strings = []
-    # if the codes for custom pizza elements are not empty strings
-    # gets coresponding codes name from sheet, else give the values an empty
-    # string
-    if custom_values != " ":
-        for row in sauces_data[-3:]:
-            if row[0] == custom_values[0]:
-                pizza_sauce_string = row[1]
-
-        for row in cheese_data[-2:]:
-            if row[0] == custom_values[1]:
-                pizza_cheese_string = row[1]
-        for row in topings_data[-10:]:
-            for toping in custom_values[2]:
-                if row[0] == toping:
-                    pizza_topings_strings.append(row[1])
-    else:
-        pizza_sauce_string = " "
-        pizza_cheese_string = " "
-        pizza_topings_strings = " "
-
-    return pizza_type_string, pizza_size_string, pizza_sauce_string, \
-        pizza_cheese_string, pizza_topings_strings, pizza_price, \
-        pizza_prep_time
-
-
-def get_sheet_order_refference():
-    """
-    Return a list with all the orders codes from the orders worksheet
-    """
-    orders = SHEET.worksheet("orders")
-    orders_list = orders.get_all_values()
-
-    refferences_list = []
-    for row in orders_list[1:]:
-        refferences_list.append(row[0])
-
-    return refferences_list
-
-
-def generate_order_refference(orders_refference):
-    """
-    Generate a random number between 0 and 1000 as order
-    refference for user
-    """
-    while True:
-        number = random.randint(0, 1000)
-        for value in orders_refference:
-            if int(value) == number:
-                continue
-        break
-
-    return number
-
-
-def final_menu(refference, duration):
-    """
-    Displays a sugestive message for user.
-    A variable will memorise the user's input value representing the option for
-    live orders, restart order or exit program.
-    """
-    os.system('cls' if os.name == 'nt' else "printf '\033c'")
-
-    print("\n")
-    print("\033[1m" + "Thank you!" + "\033[0m \n")
-    print("Your order refference is: " + colored("\033[1m" + str(refference) +
-          "\033[0m", "green") + "\n")
-    print("Estimated to be ready in: " + colored("\033[1m" + duration +
-          "\033[0m", "blue") + "\n")
-
-    while True:
-        print("What do you want to do next?")
-        print("\033[1m" + "(L) " + "\033[0m" + "check live orders")
-        print("\033[1m" + "(R) " + "\033[0m" + "make another order")
-        print("\033[1m" + "(E) " + "\033[0m" + "exit program\n")
-
-        answer = input("\033[1m" + "Write your answer here and"
-                       " press Enter when you're ready:\n")
-
-        # creates a list with every value inserted by the user
-        user_data = answer.split(" ")
-
-        if validate_data(user_data, ["L", "R", "E"], 1):
-            if user_data[0].upper() == "L":
-                print("We generate Live Orders Status...")
-                time.sleep(1)
-            elif user_data[0].upper() == "P":
-                print("We get you back to pizza menu...")
-                time.sleep(1)
-            break
-
-    return user_data[0]
-
-
-def get_total_price(orders_list):
-    """
-    Calculate total price value
-    """
-    total = 0
-    for order in orders_list:
-        total += order.price
-    total = round(total, 2)
-    return total
-
-
-def get_total_duration(orders_list):
-    """
-    Calculate total duration for an order
-    For orders that include max 10 pizzas the duration is a sum
-    between total preparation time and 15 min in the oven considering
-    that the oven has a capacity of 10 pizzas
-    For orders that include more than 10 pizzas the duration is a sum
-    between total preparation time, 15 min in the oven and 10 min extra
-    per each additional pizza
-    """
-    duration = 0
-    quantity = 0
-    # get total number of pizzas in the order
-    for order in orders_list:
-        quantity += int(order.quantity)
-
-    # get total preparation time
-    for order in orders_list:
-        duration += order.prep_time
-
-    # add 15 minutes for oven cooking
-    duration += 15
-
-    # add extra time if there are more than 10 pizzas
-    if quantity > 10:
-        extra = (quantity - 10) * 10
-        duration += extra
-
-    return duration
-
-
-def get_duration_string(duration):
-    """
-    Return a string with the number of hours and minutes
-    representing the duration of the order
-    """
-    if duration > 60:
-        hours = int(duration / 60)
-        minutes = duration - (hours * 60)
-        if hours > 1:
-            return f"{hours} hours and {minutes} minutes"
-        else:
-            return f"{hours} hour and {minutes} minutes"
-    else:
-        return f"{duration} minutes"
-
-
-def update_orders(refference, orders_list, price, order_date, order_time,
-                  duration, status):
-    """
-    Receive integers and strings as parameters to be inserted into orders
-    worksheet
-    """
-    orders = SHEET.worksheet("orders")
-    data = []
-    data.append(refference)
-    order_description = ""
-    for order in orders_list:
-        order_description += order.get_string()
-        order_description += "\n"
-    data.append(order_description)
-    data.append(price)
-    data.append(order_date)
-    data.append(order_time)
-    data.append(duration)
-    data.append(status)
-    orders.append_row(data)
-
-
-def update_order_status():
-    """
-    Update status for the orders that overcome the estimated time
-    """
-    orders = SHEET.worksheet("orders")
-    orders_list = orders.get_all_values()
-
-    # get current time
-    tz_dublin = pytz.timezone('Europe/Dublin')
-    now = datetime.now(tz_dublin)
-    current_time = now.strftime("%d/%m/%Y %H:%M")
-
-    for idx, row in enumerate(orders_list[1:]):
-        order_date_time = row[3] + " " + row[4]
-        # convert sheet string time into datetime format
-        order_time = datetime.strptime(order_date_time, "%d/%m/%Y %H:%M")
-        # add duration in minutes to order time
-        time_plus_duration = order_time + timedelta(minutes=int(row[5]))
-        # check if current time overcomes order ready time with three hours
-        # and update status
-        if time_plus_duration + timedelta(hours=3) < datetime.strptime(
-                                         current_time, "%d/%m/%Y %H:%M"):
-            orders.update_cell(idx + 2, 7, "Finished")
-        # check if current time overcomes order time plus duration and update
-        # status
-        elif time_plus_duration < datetime.strptime(current_time,
-                                                    "%d/%m/%Y %H:%M"):
-            orders.update_cell(idx + 2, 7, "Ready")
-
-
-def display_live_orders():
-    """
-    It calls the method to update orders status and after it displays a
-    table with orders refferences for orders that are preparing and
-    orders that are ready
-    """
-    os.system('cls' if os.name == 'nt' else "printf '\033c'")
-
-    update_order_status()
-    orders = SHEET.worksheet("orders")
-    data = orders.get_all_values()
-
-    # define header names
-    col_names = ["Preparing", "Ready"]
-
-    # define table content
-    preparing_values = []
-    ready_values = []
-    for row in data[1:]:
-        if row[6] == "Preparing":
-            preparing_values.append(row[0])
-        elif row[6] == "Ready":
-            ready_values.append(row[0])
-
-    # combine the two lists with preparing and ready values
-    table_data = []
-    for combination in itertools.zip_longest(preparing_values, ready_values):
-        table_data.append(combination)
-
-    # print Live Orders Status table
-    print(tabulate(table_data, headers=col_names, tablefmt="fancy_grid"))
-    print("* The orders that are ready to be collected will be shown " +
-          "\non the table for another three hours")
-    print("\n\n")
-
-    while True:
-        print("What do you want to do next?")
-        print("\033[1m" + "(L) " + "\033[0m" + "check live orders")
-        print("\033[1m" + "(R) " + "\033[0m" + "make another order")
-        print("\033[1m" + "(E) " + "\033[0m" + "exit program\n")
-
-        answer = input("\033[1m" + "Write your answer here and"
-                       " press Enter when you're ready:\n")
-
-        # creates a list with every value inserted by the user
-        user_data = answer.split(" ")
-
-        if validate_data(user_data, ["L", "R", "E"], 1):
-            if user_data[0].upper() == "L":
-                print("We generate Live Orders Status...")
-                time.sleep(1)
-            elif user_data[0].upper() == "P":
-                print("We get you back to pizza menu...")
-                time.sleep(1)
-            break
-
-    return user_data[0]
+    os.system("cls" if os.name == "nt" else "clear")
 
 
 def main():
+    """Creates a function called main. This function controls the flow
+    of the program. Also has the benefit of having returned values
+    in the same place and these can contribute
+    to other, more complex functions, as the project progresses"""
+    initial_screen_display()
+    pizza_option = pizza_option_input()
+    pizza_quantity = quantity_user_input()
+    pizza_name, pizza_price = get_pizza_name_and_price_ordered(pizza_option)
+    total_pizza_sum = calc_how_many_pizzas(pizza_name, pizza_quantity)
+    current_tot = total_cost_calculator(pizza_quantity, pizza_price)
+    add_pizza_choice_and_name_to_order_sheet(pizza_name, pizza_price)
+    estimated_cooking_time = calculate_estimated_cooking_time(total_pizza_sum)
+    shopping_cart(pizza_quantity, pizza_name, current_tot)
+    finished_order = have_finished_order()
+    reference_number = create_order_reference()
+    final_message(finished_order, estimated_cooking_time, reference_number)
+
+
+def initial_screen_display():
+    """content for initial user interaction with system
+    display table with menu to user"""
+    # FIXME: find alternative to global variable here
+    global INITIAL_SCREEN_DISPLAY_HAS_RUN
+    # code adapted from bobbyhadz.com so initial screen display
+    # only ever runs once and does not re-run when user selects
+    # no to finished order as long as its true it returns before
+    # inner codes executed, when it's executed it turns true from false,
+    # so it's only false the first time.
+    if INITIAL_SCREEN_DISPLAY_HAS_RUN:
+        return
+    INITIAL_SCREEN_DISPLAY_HAS_RUN = True
+
+    nags_banner = pyfiglet.figlet_format("Nags with Notions")
+    nags_banner = colored(nags_banner, "magenta", attrs=["reverse", "blink"])
+    print(nags_banner)
+    # show logo for 3 seconds then clear screen
+    time.sleep(3)
+    cls()
+
+
+def pizza_option_input():
+    """create a function to get users pizza choice,
+    return it to the calling function
+    which is called in main()
     """
-    Run all program functions
-    """
-    class PizzaOrder:
-        """
-        Creates an instance of PizzaOrder
-        """
-        def __init__(self, p_type, size, sauce, cheese, topings, quantity,
-                     price, prep_time):
-            self.p_type = p_type
-            self.size = size
-            self.sauce = sauce
-            self.cheese = cheese
-            self.topings = topings
-            self.quantity = quantity
-            self.price = price
-            self.prep_time = prep_time
-
-        def get_string(self):
-            """ Generates a string that includes the order details"""
-            if self.sauce == " ":
-                # generate string for custom pizza
-                pizza_string = f"{self.quantity} X {self.size} {self.p_type} "
-                if int(self.quantity) > 1:
-                    pizza_string += "pizzas"
-                else:
-                    pizza_string += "pizza"
-
-                return pizza_string
-            else:
-                # generate string for normal pizza
-                custom_pizza_string = f"{self.quantity} X {self.size} Custom "
-                if int(self.quantity) > 1:
-                    custom_pizza_string += "pizzas "
-                else:
-                    custom_pizza_string += "pizza "
-
-                custom_pizza_string += f"({self.sauce}, {self.cheese}, "
-                for ind in range(len(self.topings)):
-                    custom_pizza_string += self.topings[ind]
-
-                    if ind != len(self.topings) - 1:
-                        custom_pizza_string += ", "
-                    else:
-                        custom_pizza_string += ")"
-
-                return custom_pizza_string
-
-    add_to_order = False
-    orders_refference = []
-    # create loops so the user have the possibility to return to the previous
-    # steps when user's input = "B" and restart the order when
-    # user's input = "R"
+    # infinite loop thats only broken if valid input is given
     while True:
-        # if user choose restart the orders list is emptied
-        if add_to_order is False:
-            orders_list = []
-        # gets pizza type code
-        pizza_type = display_pizza_menu(orders_list)
+        try:
+            # code that might crash
+            print("\n Please select one of the 5 number options below")
 
-        # gets pizza type code
-        pizza_size = display_pizza_sizes()
-        while pizza_size.upper() == "B":
-            pizza_type = display_pizza_menu(orders_list)
-            pizza_size = display_pizza_sizes()
+            print(
+                tabulate(
+                    MENU_DATA,
+                    headers=["Option", "Name", "Price(€)"],
+                    numalign="center",
+                    tablefmt="double_outline",
+                ),
+            )
 
-        # gets pizza custom values codes if user choose 6
-        if pizza_type == "5":
-            custom_pizza_values = get_values_for_custom_pizza()
+            pizza_option = int(
+                input(" Which pizza would you like? Enter number 1 - 5:\n")
+            )
+            # removes pizza_options and displays how many would you like
+            time.sleep(1)
+            cls()
 
-            # restart loop
-            if custom_pizza_values[len(custom_pizza_values)-1] == "restart":
-                continue
-        else:
-            custom_pizza_values = " "
+            if 1 <= pizza_option <= 5:
+                print("How many would you like? (order max of 10)\n")
 
-        # gets pizza quantity
-        pizza_quantity = get_pizza_quantity()
-        if pizza_quantity.upper() == "R":
-            add_to_order = False
-            continue
-        # gets pizza codes strings from worksheets
-        sheet_values = get_sheet_values(pizza_type, pizza_size,
-                                        custom_pizza_values)
-        p_type = sheet_values[0]
-        size = sheet_values[1]
-        sauce = sheet_values[2]
-        cheese = sheet_values[3]
-        topings = sheet_values[4]
-        unit_price = sheet_values[5]
-        prep_time = sheet_values[6]
+                break
 
-        # creates a instance of the order
-        order = PizzaOrder(p_type, size, sauce, cheese, topings,
-                           pizza_quantity, int(pizza_quantity) * unit_price,
-                           int(pizza_quantity) * prep_time)
-        # adds the instance to the orders list
-        orders_list.append(order)
+            raise ValueError
+        except ValueError:
+            not1_5 = "not a number between 1 and 5"
+            not1_5 = colored(not1_5, "red", attrs=["reverse", "blink"])
+            print(not1_5)
+            time.sleep(3)
+    return pizza_option
 
-        # display order details
-        finalize_order_value = finalize_order(orders_list)
-        if finalize_order_value.upper() == "A":
-            add_to_order = True
-            continue
-        elif finalize_order_value.upper() == "R":
-            add_to_order = False
-            continue
 
-        # get today date
-        today = date.today()
-        order_date = today.strftime("%d/%m/%Y")
+def quantity_user_input():
+    """Check if user has inputted valid data & let them know if they have not
+    Args:
 
-        # get order time
-        tz_dublin = pytz.timezone('Europe/Dublin')
-        now = datetime.now(tz_dublin)
-        order_time = now.strftime("%H:%M")
-
-        # get refferences from worksheet and generate a new one
-        orders_refference = get_sheet_order_refference()
-        order_refference = generate_order_refference(orders_refference)
-
-        # get total order duration in minutes
-        duration_in_minutes = get_total_duration(orders_list)
-
-        # update orders worksheet
-        update_orders(order_refference, orders_list,
-                      get_total_price(orders_list),
-                      order_date, order_time,
-                      duration_in_minutes, "Preparing")
-
-        # get string format for duration
-        duration_string = get_duration_string(duration_in_minutes)
-
-        # display order refference and final menu
-        final_menu_value = final_menu(order_refference, duration_string)
-        if final_menu_value.upper() == "L":
-            # display live orders
-            live_orders_menu_value = display_live_orders().upper()
-            while live_orders_menu_value == "L":
-                live_orders_menu_value = display_live_orders().upper()
-            # start the program again if the user press R
-            if live_orders_menu_value == "R":
-                add_to_order = False
-                continue
-            # end the program if the user press E
+    Returns:
+        _type_: boolean_description_if no errors returns True
+    """
+    quant_pizza_check = [len(sub_list) for sub_list in QUANT_PIZZA_HOLDER]
+    quant_pizza_check = sum(quant_pizza_check)
+    # infinite loop thats only broken if valid input is given
+    while True:
+        try:
+            # code that might crash
+            print('Quantity must be a number between 1 and 10\n')
+            pizza_quantity = input(f"Enter number here:\n")
+            if pizza_quantity.isdigit():
+                pass
             else:
-                os.system('cls' if os.name == 'nt' else "printf '\033c'")
-                print(colored("\033[1m" + "Hope to see you soon!" +
-                              "\033[0m", "yellow"))
-        # start the program again if the user press R
-        elif final_menu_value.upper() == "R":
-            add_to_order = False
-            continue
-        # end the program if the user press E
-        else:
-            os.system('cls' if os.name == 'nt' else "printf '\033c'")
-            print(colored("\033[1m" + "Hope to see you soon!" +
-                          "\033[0m", "yellow"))
+                pizza_quantity = "-1"
+            cls()
+            if (
+                int(pizza_quantity) >= 0
+                and int(pizza_quantity) <= 11
+                and int(pizza_quantity) + quant_pizza_check < 11
+            ):
+                # add the quantity order to the add to sheet function
+                add_quantity_to_order_sheet(pizza_quantity)
+                break
+
+            # https://stackoverflow.com/questions/7075200/
+            # converting-exception-to-a-string-in-python-3
+            # pass pizza q to except through exception class
+            class PizzaqException(Exception):
+                """_summary_class that raises exception and
+                passes pizza quantity as the second argument
+
+                Args:
+                    Exception (_type_):string _description_passes
+                    pizza quantity as string to except statement
+                """
+
+                def __init__(self, pizza_quantity):
+                    self.pizza_quantity = pizza_quantity
+
+            # raise Error
+            raise PizzaqException(pizza_quantity)
+        except PizzaqException as e:
+            not1_10 = "Quantity must be a number between 1 and 10\n"
+            not1_10 = colored(not1_10, "red", attrs=["reverse", "blink"])
+            print(not1_10)
+            quantity = str(e)
+            
+            # from https://peps.python.org/pep-0008/ 
+            # wrap long code and seperate with f strings
+            too_much = (f'Your current quantity is: {quant_pizza_check}.\n'
+                f'You can only select {10 - quant_pizza_check} more pizzas\n')
+            too_much = colored(too_much, "red", attrs=["reverse", "blink"])
+            print(too_much)
+            quant_pizza_check -= int(quantity)
+            # covers if first no. smaller than second
+            if quant_pizza_check <= 0:
+                quant_pizza_check += int(quantity)
+
+    return pizza_quantity
+
+
+def have_finished_order():
+    """check if user has finished order or wants
+    to go back and add more to order
+
+    Returns:
+        _type_: _description_
+    """
+    while True:
+        try:
+            finish_order = input(("\nHave you completed your order? (yes/no):  "))
+            print("Please enter 'yes or 'no\n")
+            cls()
+
+            # check for variations of yes/no
+            # adapted from https://bobbyhadz.com/blog/python-input-yes-no
+            yes_choices = ["yes", "y"]
+            no_choices = ["no", "n"]
+
+            # lower() function used in case user inputs capitals
+            if finish_order.lower() in yes_choices:
+                break
+            if finish_order.lower() in no_choices:
+                print("You said no")
+                main()
+                break
+
+            print("Type yes or no")
+
+            raise ValueError
+        except ValueError:
+            notyes_no = "Answer must be yes or no"
+            notyes_no = colored(notyes_no, "red", attrs=["reverse", "blink"])
+            print(notyes_no)
+
+    return finish_order
+
+
+def get_pizza_name_and_price_ordered(pizza_option):
+    """_summary_
+
+    Returns:
+        : _description_a string of the name of the pizza chosen by the user.
+        Passes these values back to where they were called in the main function
+    """
+    i = pizza_option
+    pizza_name = MENU.cell(i, 2).value
+    pizza_price = MENU.cell(i, 3).value
+    return pizza_name, pizza_price
+
+
+def calc_how_many_pizzas(pizza_name, pizza_quantity):
+    """_summary_calculate the users total cost as items are
+    added to the list. Returns this to main()
+    """
+    pizza_name_by_quantity = [pizza_name] * int(pizza_quantity)
+    QUANT_PIZZA_HOLDER.append(pizza_name_by_quantity)
+
+    total_pizza_sum = [len(sub_list) for sub_list in QUANT_PIZZA_HOLDER]
+    total_pizza_sum = sum(total_pizza_sum)
+    CURRENT_ORDER.append(pizza_name)
+    return total_pizza_sum
+
+
+def shopping_cart(pizza_quantity, pizza_name, current_tot):
+    """_summary_presents total order as x: pizza names. Continually
+    updates as user selects more pizzas
+
+    Args:
+        pizza_name (_type_): _description_string
+        pizza_quantity (_type_): _description_string
+
+    """
+
+    total_cost = sum(TOTAL_COST)
+    print("                   ---------- YOUR CART ---------\n")
+
+    CART_DISPLAY.append([pizza_quantity, pizza_name, current_tot, total_cost])
+
+    print(
+        "Quantity              Item           "
+        "                 Price       Total Price\n"
+    )
+
+    while len(CART_DISPLAY[0]) <= 6:
+        i = int(len(CART_DISPLAY)) - 1
+        for b in range(3, len(CART_DISPLAY[i])):
+            CART_DISPLAY[i].insert(b * 1, "           ")
+            CART_DISPLAY[i].insert(b * -1, "   ")
         break
+    #  adapted from https://stackoverflow.com/questions/30521975/
+    # print-a-nested-list-line-by-line-python
+    # for loop and " ".join() mapping each item in the
+    # nested list to a str with map()
+    # map used to manipulate all the items
+    # here it converts each item to a string,
+    # which is joined with " " so
+    # each item can be printed on seperate lines
+    for item in CART_DISPLAY:
+        print(" ".join(map(str, item)))
+
+
+def create_order_reference():
+    """Generate random number between 1- 1000 and set as reference"""
+    random_number = random.randint(0, 1000)
+    return random_number
+
+    # code inspiration from useriasminna
+
+
+def calculate_estimated_cooking_time(total_pizza_sum):
+    """calculate the estimated cooking time in relation
+    to the amount of pizzas ordered. Nags with Notions have
+    2 ovens, and each pizza takes 15 mins to cook
+    """
+    # code adapted from
+    # https://stackoverflow.com/questions/69577262/how-to-count-elements-in-nested-lists\nmp/
+    estimated_cooking_time = 0
+
+    for i in range(1, 11, 1):
+        for j in range(15, 100, 15):
+            # for even numbers
+            if total_pizza_sum == i and int(i) % 2 == 0:
+                estimated_cooking_time = i * j / 2
+                break
+            # for odd numbers
+            if total_pizza_sum == i:
+                # margin of error higher at longer cook times of 5+ min
+                estimated_cooking_time = (i * j / 2) / 5 + 3
+    return estimated_cooking_time
+
+
+def final_message(finished_order, estimated_cooking_time, reference_number):
+    """final message displaying reference number,
+    and estimated cooking time. Only runs if finished order is true.
+    """
+    while finished_order in ("yes", "y"):
+        print(("      Thank you for choosing Nags with Notions! Enjoy your meal!\n"))
+        print(
+            "Quantity               Item       "
+            "                     Price       Overall Price\n"
+        )
+        for xs in CART_DISPLAY:
+            print(" ".join(map(str, xs)))
+        print(f"\n\nYour reference number is: PZ{reference_number}")
+        print(f"\nEst cooking time: {int(estimated_cooking_time)} minutes\n")
+        break
+
+
+def add_pizza_choice_and_name_to_order_sheet(pizza_name, pizza_price):
+    """
+    Pizza info taken from pizza validator function. Uploaded to google sheets
+    stock sheet here.
+    """
+    order = SHEET.worksheet("order")
+
+    # iterator is length of columns + 1 so new row entered each time
+    i = len(order.col_values(1)) + 1
+    order.update_cell(i, 1, f"{pizza_name}")
+    order.update_cell(i, 2, f"{pizza_price}")
+
+
+def add_quantity_to_order_sheet(pizza_quantity):
+    """
+    Pizza info taken from pizza validator function. Uploaded to google sheets
+    stock sheet here.
+    """
+    order = SHEET.worksheet("order")
+
+    # iterator is length of columns + 1 so new row entered each time
+    i = len(order.col_values(1))
+    quantity_selection = list(pizza_quantity)
+    order.update_cell(i, 3, f"{quantity_selection[0]}")
+    return quantity_selection
+
+
+def total_cost_calculator(quantity: str, pizza_price) -> int:
+    """function to calculate total price. Quantity taken from add
+    values function. Quantity argument
+    then multiplied with corresponding price in excel sheet.
+    Total price then added to total price column in excel
+
+    Args:
+        quantity (string): Users selection of amount of pizzas required.
+    """
+    order = SHEET.worksheet("order")
+    i = len(order.col_values(1))
+    current_tot = int(quantity[0]) * int(pizza_price)
+    order.update_cell(i, 4, f"{current_tot}")
+    TOTAL_COST.append(int(current_tot))
+    return current_tot
+
+
+def stock_checker(pizza_option, quantity):
+    """function takes in the order and reduces this from the stock. If
+    the stock is below 0 the user is informed that the products unavailable
+    and to try something else
+
+    Args:
+    quantity (int): take from user_order_quantity request function
+    pizza_name (int): _description_ taken from
+    user_order_quantity request function
+
+    Returns:
+        int: an identifer for which pizza needs to have its stock reduced
+        and by how much
+    """
+    stock = SHEET.worksheet("stock")
+    if pizza_option == "Margherita for Mares":
+        print("Margherita here", pizza_option)
+    print("Pony", stock.cell(2, 1).value)
+    print("stock_checker", pizza_option, quantity, stock.acell("A2"))
 
 
 main()
