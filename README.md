@@ -1,4 +1,4 @@
-# PIZZA ORDER SYSTEM
+# AMERICAN PIZZA - ORDER SYSTEM
   - [OVERVIEW](#overview)
   - [UX/UI](#uxui)
     - [STRATEGY](#strategy)
@@ -8,6 +8,16 @@
     - [STRUCTURE<br>](#structure)
     - [FLOWCHARTS<br>](#flowcharts)
     - [SURFACE/DESIGN<br>](#surfacedesign)
+      - [Pizza Menu Page](#pizza-menu-page)
+      - [Pizza Sizes Page](#pizza-sizes-page)
+      - [Pizza Sauces Page](#pizza-sauces-page)
+      - [Pizza Cheese Page](#pizza-cheese-page)
+      - [Pizza Topings Page](#pizza-topings-page)
+      - [Pizza Quantity Page](#pizza-quantity-page)
+      - [Order Overview Page](#order-overview-page)
+      - [Pizza Final Menu Page](#pizza-final-menu-page)
+      - [Pizza Orders Live Status Page](#pizza-orders-live-status-page)
+  - [FEATURES](#features)
     - [EXISTING FEATURES<br>](#existing-features)
     - [FUTURE FEATURES<br>](#future-features)
   - [BUGS OR ERRORS](#bugs-or-errors)
@@ -21,315 +31,224 @@
   - [CREDITS](#credits)
   - [TOOLS](#tools)
   - [ACKNOWLEDGEMENTS](#acknowledgements)
+## OVERVIEW
+I created a fully functional order system for a fictional restaurant called American Pizza, whose field of activity is the preparation and serving of pizza inspired by American fast food. The main purpose of this program is to facilitate the process of taking orders by introducing a system that automatically populates a google spreadsheet with data about each order for better monitoring. Also, it is very useful for the restaurant's clients because it estimates the waiting time for each order and it gives them the option to check their order status live.
+American Pizza order system was created entirely with Python and can be used through the terminal implemented with the Code Institute Python Template whose design was adapted to respect the restaurant theme.
+<br><br>
+The fully deployed project can be accesed at [this link](https://american-pizza-order-system.herokuapp.com/).<br>
+<hr>
 
-## OVERVIEW 🚠
-
-I have created a fully function pizza ordering system to meet the needs of customers for a real pizza service, Nags With Notions. You can find their website here, which I also created as part of my PP1 requirements and is now online: [Nags With Notions](nagswithnotions.ie). The main function of the system is to allow customers to purchase items through the Nags with Notions website. Additionally, order information is updated to a spreadsheet, so Nags With Notions can make more informed decisions regarding the amount of product they require and can also keep users up-to-date on what's available. The program was created entirely using Python and the intention was to keep all aspects of the design in line with the Nags with Notions style. 
-
-The [Live Site](https://pizza-ordering-system-b873de0bec0c.herokuapp.com/) is fully accessible on Heroku. 
+[![N|Solid](assets/images/full_image.JPG)](assets/images/full_image.JPG)
+<hr>
 
 ## UX/UI
-
 ### STRATEGY
+#### Goals<br>
+* The program should be intuitive to navigate<br>
+* The information that appears on the screen should be relevant for each step of the order<br>
+* Instructions should appear to sugerate the user what values to enter<br>
+* The important information should be highlighted to offer a better user experience<br>
+* The program should access the right datasheet for every step <br>
+* The program should update the Orders data sheet with the right values<br>
+* The order content and price has to be displayed to the user before the order is finished<br>
+* The order duration time has to be calculated and displayed to the user after the order is finished<br>
+* The program should give the possibility of checking the status of the order
 
-#### Goals 🥅<br> 
+#### User Stories<br>
+* As a user, I want to see information about the pizza options that the restaurant offer<br>
+* As a user, I want to be able to create my own custom pizza<br>
+* As a user, I want to be able to add more types of pizzas to my order<br>
+* As a user, I want to see the content of my order when deciding to add more food.<br>
+* As a user, I want to be able to choose the quantity for each pizza<br>
+* As a user, I want to see information about the total price and duration of the order<br>
+* As a user, I want to be assigned a code for my order<br>
+* As a user, I want to check my order status<br>
 
-* To create a Pizza ordering system that allows users to order their pizzas online
-* It should improve customer experience and reduce staff workload by not having to take phone orders.
-* It will also reduce queue sizes.
-* This system will increase customer satisfaction by providing a detailed confirmation of the order.
-* Nags with Notions aims to increase its sales by providing customers with an online ordering system where they can see the options on offer. 
+### SCOPE<br>
+For the implementation of the ordering system I have planned the following features:<br>
 
-#### User Stories 📖<br>
+* Data from spreadsheet about pizzas characteristics to be displayed to the user in tables<br>
+* The Create Your Own pizza option that adds extra steps for the order<br>
+* The user's options will be written on the screen<br>
+* The program displays warnings when the input of the user doesn't respect the format<br>
+* The option of displaying the order content <br>
+* The program calculates and displays the order total price<br>
+* The program calculates and displays the order total duration<br>
+* The program assigns a number reference to the order<br>
+* A table with the status of the order can be displayed<br>
 
-* I want to be able to easily browse the menu and select the pizzas I want.
-* I want to be able to see the prices of the pizzas on offer
-* I want to be given a warning if I've entered something incorrectly.
-* I want a cart displayed that updates the price and items, as I add to it
-* I want a reference number for my order and the total price at the end.
-* I want to know roughly how long I need to wait for my order. 
+### STRUCTURE<br>
+The ordering system can be used by the clients through a mock terminal that appears when the link is accessed.
+The terminal was created using the Code Institute template which is not my work but his <code>CSS</code> code has been adjusted to conform its design with the restaurant theme.
+Apart from that, the program was made with <code>Python</code> as the only programming language used. The file which stores the entire code that appears in the terminal is named <code>run.py</code> and this is what Heroku will run when the program is used.<br>
 
-### SCOPE 🔭<br>
-
-The following features have been planned:
-
-* Information about the current pizzas and their prices will be taken from a 
-spreadsheet and presented to the user
-* Users can select any pizzas, up to a maximum of ten
-* The program will display warnings if the user has chosen too many pizzas
-or the input they have provided isn't correct
-* The user options will be presented on-screen
-* The user will be updated on their current purchases and the exact overall price
-* The user will be asked to proceed to checkout or continue updating their order
-* A program will estimate the likely cooking time
-* The user will receive a unique receipt
-* Information will be presented neatly in tables/lists
-
-### STRUCTURE☠<br> 
-
-This [Project Wireframe](./assets/images/readme_images/pizza_order_system_wireframe.pdf) 
-shows the overall structure of the program. It was written using Python. The terminal was
-created using the Code Institute template. All the coding can be found in run.py; which is
-found on my [GitHub account](https://github.com/JWalshe86).
-
-
-### FLOWCHARTS 📈<br>
-
-![Project Flow Chart](/assets/images/readme_images/features_images/flow_chart.png)
+### FLOWCHARTS<br>
+The Flowchart for my program was created using <b>LucidChart</b> and it visually represents how the system works.<br>
+[![N|Solid](assets/images/blank_diagram.jpeg)](assets/images/blank_diagram.jpeg)
 
 ### SURFACE/DESIGN<br>
+The ordering system displays pages as steps for completing the order. Every page contains information relevant to the user and a menu that will help him navigate through the program.<br>
+#### Pizza Menu Page
+* When the user first launches the program a welcome message is displayed and the pizza menu table.<br>
+<img src="assets/images/menu.JPG" width="80%"><br>
 
-Each page contains information to inform the user about the pizzas on offer and let them
-decide what they would like. Each page leads into the next and culminates with a final display
-message showing the user's purchase, overall cost, estimated wait time, and a unique reference number.
+#### Pizza Sizes Page
+* In this step the user can see information about sizes and prices for the pizza.<br>
+<img src="assets/images/sizes.JPG" width="80%"><br><br>
+
+If the user choose the option of Create Your Own pizza, three more aditional steps are added to the process.<br>
+#### Pizza Sauces Page
+* The user can see sauces option as the first step in creating a custom pizza. <br>
+<img src="assets/images/sauce.JPG" width="80%"><br>
+
+#### Pizza Cheese Page
+* A table with cheese options is displayed to the user as the second aditional step.<br>
+<img src="assets/images/cheese.JPG" width="80%"><br>
+
+#### Pizza Topings Page
+* In this step the user can choose up to 5 topings for his custom pizza.<br>
+<img src="assets/images/topings.jpg" width="80%"><br>
+
+#### Pizza Quantity Page
+* Choosing a number for the quantity of pizza the client wants is one of the last steps in completing the order.<br>
+<img src="assets/images/quantity.JPG" width="80%"><br>
+
+#### Order Overview Page
+* Before finishing the order, the user can see his order content and it's final price and it is given the option of adding to the order.<br>
+<img src="assets/images/overview.JPG" width="80%"><br>
+
+#### Pizza Final Menu Page
+* After processing the order, the client is informed about his number refference and the estimated time.<br>
+<img src="assets/images/finish.JPG" width="80%"><br>
+
+#### Pizza Orders Live Status Page
+* As an aditional step every user can access a Live Status table that updates its values every time it is loaded.<br>
+<img src="assets/images/status.JPG" width="80%"><br>
+<hr>
 
 ## FEATURES
+### EXISTING FEATURES<br>
+The program has multiple features that were implemented to help the client and the restaurant owner as well. For simulating a real-life experience, the system is linked to a <b>Google Spreedsheet</b> that can be accessed [here](https://docs.google.com/spreadsheets/d/1DBQfkHd9fv4RQxQV-SxT5p1I38P6pLeuPQtpLCS1Axg/edit?usp=sharing).<br><br>
 
-### EXISTING FEATURES
+* The program displays real time informations about curent menu and pizza details in the form of a table by requesting data from the spreadsheet every time it is loaded. <br>
+    <img src="assets/images/table1.JPG" width="60%">
+    <img src="assets/images/table2.JPG" width="38%">
+    <img src="assets/images/table3.JPG" width="35%">
+    <img src="assets/images/table4.JPG" width="35%">
+    <img src="assets/images/table5.JPG" width="40%"><br>
 
-The program was designed primarily to help the user but elements can help the client [nagswithnotions](nagswithnotions.ie). To give real data to the client, the system is linked to
-a Google Spreadsheet: [Pizza Order Google Spreadsheet](https://docs.google.com/spreadsheets/d/14eg7Jg65BIRgRaMwWoeuFZHibci230T1KNaDBDSYRrE/edit#gid=819050592)
+* For a good user experience and to not risk breaking the program, I have implemented a feature that validates the user's input and gives him the right feedback.<br>
+    <img src="assets/images/warning1.JPG" width="70%">
+    <img src="assets/images/warning2.JPG" width="70%">
+    <img src="assets/images/warning3.JPG" width="70%">
+    <img src="assets/images/valid.png" width="30%">
 
-![Welcome Banner](./assets/images/readme_images/features_images/inital_screen_display.png)
+* The client has the possibility to see an overview of the order before processing it and on the first page in case he choses to add more pizzas type.<br>
+    <img src="assets/images/overview1.JPG" width="60%">
+    <img src="assets/images/overview2.JPG" width="35%">
 
-![Menu Display](./assets/images/readme_images/features_images/menu_display.png)
+* The total price is calculated for every order by multiplying the quantity with the unit price for the specific size of the pizza chosen, and it is displayed as a part of the order overview before processing it.<br>
+    <img src="assets/images/price.JPG" width="35%">
 
-![Error display pizza option](./assets/images/readme_images/features_images/error_display_pizza_option.png) 
+* Every order is given a reference to be used by the client when he checks his order status. This code is generated as a unique random number between 0 and 1000. <br>
+    <img src="assets/images/refference.JPG" width="40%">
 
-![Quantity Order Display](./assets/images/readme_images/features_images/quantity_order_display.png)
+* Another important feature is the estimated time for the order which is calculated by multiplying the quantity with each pizza's time for preparation and adding 15 minutes for the oven cooking and 10 minutes for each extra pizza over the quantity of 10.<br>
+    <img src="assets/images/time.JPG" width="40%">
 
-![Quantity Order Error](./assets/images/readme_images/features_images/quantity_order_error.png)
+* When the user chooses to finish the order, a new line with all the order's details is inserted in the Orders Worksheet to keep a good track of them every day.<br>
+    <img src="assets/images/new_line.JPG" >
 
-![Cart Display 1](./assets/images/readme_images/features_images/cart_display_1.png)
-
-![yes no error message](./assets/images/readme_images/bugs_images/yes_no_error_msg.png)
-
-![Quantity Order Error 2](./assets/images/readme_images/features_images/quantity_order_err2.png)
-
-![Cart Display 2](./assets/images/readme_images/features_images/cart_display_2.png)
-
-![Final Display](./assets/images/readme_images/features_images/final_display.png)
-
-
-### FUTURE FEATURES 🚀
-
-## Technologies used 🧑‍💻
-- HeroKu - Used to host and deploy website.
-- The Tabulate library was used to import tabulate to create the table 
-that presents the pizza menu.
-- The termcolor library was used to import colored to highlight some text
-- [webfx.com](https://www.webfx.com/tools/emoji-cheat-sheet/) for emoji's
-
-## Languages used
-
-- Python 🐍
-
-## BUGS OR ERRORS 🐛 😵
-
-![Estimated time not calculated after quantity surpassed](./assets/images/bugs_images/Est_cook_time_error_after_pizza_q_surpass.png)
- 
-## TESTING 🧪
-
-[Pylint Actions 261023](./Pylint_actions261023.pdf)
-[Pylint Actions 051123](./testing/pylint_report_051123.txt) Your code has been rated
- at 8.35/10 (previous run: 8.35/10, +0.00)
- * The global statement for 'initial screen display' has run was left in the code, despite being
-<<<<<<< HEAD
- highlighted by Pylint. This is because it appears to work well and I don't know another way to prevent the screen display when the user selects they want to add more items to their order. 081123 This issue 
- was resolved by using the fact that, unlike variables, lists can be manipulated regardless of scope. A 
- list was appended after the initial function was run. Once this lists length was >0 the function didn't
- run again. 
-=======
- highlighted by Pylint. This is because it appears to work well and I don't know another way to prevent the screen display when the user selects they want to add more items to their order. 
->>>>>>> 9bf492dea4518d6c28059afe302d28675f3d631a
- * The code to display the cart items: [print(*x) for x in CART_DISPLAY] has been highlighted by Pylint for not being assigned to a variable. This was temporarily ignored as it's working well and I don't know an alternative. Eventually, thanks to StackOverflow, I found a resolution by using a for loop and " ".join() mapping each item in the nested list to a string with map(). Map was used to manipulate all the items and convert each item to a string which is then joined with " " so each item can be printed on separate lines.
- * The except PizzaException as e was showing as possibly unbound, despite working. By moving the 
- PizzaException class into the global scope this issue was resolved.
- * After addressing the recommendations the Pylint report reads: Your code has been rated at 9.66/10 (previous run: 9.60/10, +0.06). It's just the above two recommendations to address. 
- * [Code Institute Pylinter 051123](./testing/Code_Institute_Pylinter_051123.pdf)
- * [Code Institute Pylinter cleared](./testing/CI_Pylinter_cleared.png)
- * Test run on Heroku 05/11/23. os.system('cls') not recognised by Heroku but os.system('clear') is. Solved with the following if statement: 'os.system('cls' if os.name=='nt' else 'clear')'. I also had to run pyfiglet to my requirement.txt, so Heroku could recognize it as a dependency.
-
- ### Feature Testing 061123/071123
-
- All tests took place on the [deployed Heroku site]((https://pizza-ordering-system-b873de0bec0c.herokuapp.com/)) 
-
-  <details><summary>Welcome Banner</summary>
-<img src="./assets/images/readme_images/features_images/inital_screen_display.png">
-</details>
-
-    * Expected: Upon entering the site expect the Nags with Notions Banner to display in large purple writing for 3 seconds and then disappear. 
-    * Outcome: displayed as expected. 
-
-  <details><summary>Menu Display</summary>
-<img src="./assets/images/readme_images/features_images/menu_display.png">
-</details>
-
-    * Expected: menu to display after the banner disappears. Expected all 5 pizzas to be displayed with their prices respectively. Expected a table with a user input option underneath. 
-    * Outcome: Displayed as expected.
-
- <details><summary>Error handling for 'display pizza option'</summary>
-<img src="./assets/images/readme_images/features_images/error_display_pizza_option.png">
-</details>
-
-    * Expected red error message to arise with characters outside 1-5. Tested with 0, f, ';', and 6. The user should then be brought back to the option of entering 1-5 again.  
-    * Outcome: As expected a red warning sign appeared for all the invalid entries and the user
-    was brought back to the option of entering 1-5 every time. With a valid entry '2', the user was asked to input the amount of pizzas they would like. 
-
-  <details><summary>Quantity order error handling</summary>
-<img src="./testing/Feature_Quantity_testing_error.png">
-</details>
-
-    * Expected: red error message to arise with characters outside 1-10. Tested with -1, f, ';', and 11. The user should then be brought back to the option of entering quantity again.
-    * Outcome: While it worked for -1, unexpectedly for 'f' I got a warning message in the terminal. The issue was that the exception wouldn't accept non-integers. Using the isDigit() function, by converting anything that wasn't an integer to -1, I was able to resolve this issue. 
-
-  <details><summary>Cart Display (first time)</summary>
-<img src="./assets/images/readme_images/features_images/cart_display_1.png">
-</details>
-
-    * Expected: cart to show correct quantity, name price, and total price. 
-    * Outcome: As expected the cart displayed information correctly. 
-
- <details><summary> Continue order Error Handler</summary>
-<img src="./assets/images/readme_images/bugs_images/yes_no_error_msg.png">
-</details>
-
-    * Expected: red warning message saying input must be yes or no for incorrect input. Tested 1, ';'  cat, and *. 
-    * Outcome: As expected the red error msg arose for all tests.
-
-  <details><summary> Quantity Order 2 Error Handling</summary>
-<img src="./assets/images/readme_images/features_images/quantity_order_err2.png">
-</details>
-
-    * Expected. Red warning saying how too many pizzas were ordered & the number of options the user
-    has left.
-    * Outcome: As expected red warning sign, stating the amount of pizzas the user can still
-    choose from. 
-  
-  <details><summary> Cart Display 2</summary>
-<img src="./assets/images/readme_images/features_images/cart_display_2.png">
-</details>
-
-    Expected: Cart to display subsequent order entries with the correct total price.
-    Outcome: As expected the extra orders were included in the cart and the total prices
-    were correct. 
-
-  <details><summary> Final Display </summary>
-<img src="./assets/images/readme_images/features_images/final_display.png">
-</details>
-
-    Expected: Upon the user clicking yes, to 'have you completed your order'; The cart shows the correct information. A receipt number and an 
-    estimated wait time which relates to the number of pizzas being cooked.
-    Outcome: As expected the correct cart information is shown. 
-    A unique reference number is present and the estimated cooking time
-    relates to the amount of pizzas being ordered.
-
-#### User Stories Testing<br>
-
-* Need: I want to be able to easily browse the menu and select the pizzas I want.
-* _Outcome_: _Achieved_. _A_ _clear_ _menu_ _is_ _present_ _displaying_ _an_ _up-to-date_ _list_ _of_ _available_ _pizzas_.
-
-* Need: I want to be able to see the prices of the pizzas on offer.
-* _Outcome_: _Achieved_. _The_ _menu_ _displays_ _the_ _prices_ _adjacent_ _to_ _the_ _relevant_ _pizza_.
-
-* Need: I want to be given a warning if I've entered something incorrectly.
-* _Outcome_: _Achieved_: _Red_ _warning_ _messages_ _highlight_ _incorrect_ 
-_user_ _input_ _and_ _explain_ _what_ _to_ _do_ _correctly_.
-
-* Need: I want a cart displayed that updates the price and items, as I add to it.
-* _Outcome_: _Achieved_: _Cart_ _updates_ _with_ _correct_ _information_, 
-_as_ _user_ _adds_ _items_. _The_ _overall_ _total_ _is_ _correct_. 
-
-* Need: I want a reference number for my order and the total price at the end.
-* _Outcome_: _Achieved_. _A_ _unique_ _reference_ _number_ _is_ _displayed_ _for_ 
-_every_ _order_.
-
-* Need: I want to know roughly how long I need to wait for my order.
-* _Outcome_: _Achieved_. _The_ _estimated_ _wait_ _time_ _relates_
- _to_ _the_ _quantity_ _of_ _pizzas_ _being_ _ordered_. 
-
-## MODULES IMPORTED 👽
-
- * The os module was used for its ability to manipulate the operating system, particularly to clear
- the terminal screen. 
- * The time module was used to complement the os module and delay when items were displayed or 
- lengthen the time an item was displayed.
- * The random module was used to present a random number that could be used for the reference.
- * The Gspread module was used to manipulate Google Sheets.
- * The pyfiglet module was imported to style the Nags with Notions banner. 
+* The last feature I have implemented gives the client the possibility to check his order status by relating to his given reference. Every time a client wants to see the live orders, the Worksheet first updates the status for each order then it displays a table with the right values.<br>
+    <img src="assets/images/live_status.JPG" width="60%">
 
 
-## DEPLOYMENT 🚀
+### FUTURE FEATURES<br>
+* Create a user-friendly interface for the program that will facilitate the process of ordering.
+* Update the algorithm that calculates the estimated time for preparing the order because at the moment it doesn't consider the orders that are already in preparation and could delay the time for the last orders to be done. 
+* Implementing a secured card payment feature and the requesting of a completed payment code for cash payments cases, before processing the order. This feature should prevent unpleased situations of unpaid orders but firstly should come in help of the client by giving him more payment options.
+<hr>
 
+## BUGS OR ERRORS
+* During the development of the project, I have encountered a few problems when writing and testing the feature that updates the status for each order in the Google Spreadsheet because there were multiple bugs when trying to work with string and date and time type of values.
+This feature calculates if the estimated duration for the order added to the time it was registered has overcome the current time to update its status from "Preparing" to "Ready", and if the overcoming time is more than three hours, the status will be "Finished".
+Even if when I tested it worked properly, I noticed that the algorithm doesn't consider the date of the order as well and it didn't update the orders of the previous days as well.
+The solution was to create a date and time type of variable with values from the Date and Time columns and compare them with the current date and time after adding the duration. 
+<hr>
+
+## TESTING
+The testing can be found at [TESTING.md](TESTING.md).
+
+## MODULES IMPORTED
+* <b>google.oauth2.service_account</b> for using the<code> Credentials </code> function on "creds.json" file that was used to link the program with the Google spreadsheet using the <b>gspread</b> module
+* <b>os</b> module was imported for accessing <code>os.system</code> to clear the terminal
+* <b>time</b> is the module used for delaying the feedback for the user with <code>time.sleep()</code>
+* <b>datetime</b> module was very useful when needed to convert strings into datetime format with <code>datetime.strptime()</code>
+* <b>random</b> is the module utilised for generating the order refference as a number between 1 and 1000 with <code>random.randint()</code>
+* <b>itertools</b> module helped me iterate through two lists of different lengths with <code> itertools.zip_longest()</code>
+* <b>pytz</b> was used for memorising the local timezone with <code>pytz.timezone()</code>
+* From <b>termcolor</b> module I imported <code>colored</code> for printing text in different colors
+* <b>tabulate</b> module imported the <code>tabulate</code> function for printing the tables
+
+
+## DEPLOYMENT
 ### CREATING THE WEBSITE
-I have used the [Code Institute Python Essentials Template](https://github.com/Code-Institute-Org/python-essentials-template) to create a terminal where my Python code will generate its output.
-
+I have used the [Code Institute Python Essentials Template](https://github.com/Code-Institute-Org/python-essentials-template) for creating a terminal where my Python code will generate its output.
+The steps were as follows:
+- Click the <i>Use this template</i> button
+- A New Repository page will appear, write a Repository name and a short description and press <i>Create repository from template</i>
+- Press the green Gitpod button to create your project workspace and start developing your website<br></br>
   
 ### DEPLOYING ON HEROKU
+After finishing developing the program I deployed it on <b>Heroku</b> following the instructions:
+- Create an account and login into [Heroku](https://id.heroku.com/login) website
+- Click "New -> Create new app" button
+- Insert your app's Name and Choose your region then click the "Create App" button
+- Into the <i>Settings</i> tab go to "Config vars" section and click "Reveal Config Vars"
+- Enter the PORT in the KEY section and 8000 for its value, then click "Add" 
+- Go to "Buildpacks" section and click "Add buildpack"</br>
+- Firstly add the <b>Python</b> buildpack then <b>NodeJs</b>
+- Into the <i>Deploy</i> tab go to "Deployment method" and select <b>Github</b>
+- After that go to "App connected to GitHub" and look for your GitHub repository name to link it
+- You can now choose to either manually or automatically deploy your app to Heroku.
+- With automatic deploys enabled, Heroku will build a new version of the app each time a change has been pushed to the repository
+- Manual deploys means your app will be updated only when you manually click to deploy it
+- When the deploying is finished, a link will be provided to you for accessing your app
 
-- Install Gspread using pip install Gspread in the terminal
-- Ensure the requirement.txt file in the virtual working environment contains Gspread
-- Enter [Heroku](https://id.heroku.com/login) and click 'Create new App'.
-- Store sensitive data contained in the creds.json file in the config/Environment Vars
-- Add both Python and node.js buildpacksClick Deploy and then connect to GitHub
-- Search and connect to the GitHub repository name
-- Click deploy branch
-- When the project has been successfully deployed, click view.
+### FORK THE REPOSITORY 
+For creating a copy of the repository on your account and change it without affecting the original project, use<b>Fork</b> directly from GitHub:
+- On [My Repository Page](https://github.com/useriasminna/american_pizza_order_system), press <i>Fork</i> in the top right of the page
+- A forked version of my project will appear in your own repository<br></br>
 
-### FORK THE REPOSITORY 🍴
+### CLONE THE REPOSITORY
+For creating a clone of the repository on your local machine, use<b>Clone</b>:
+- On [My Repository Page](https://github.com/useriasminna/american_pizza_order_system), click the <i>Code</i> green button, right above the code window
+- Chose from <i>HTTPS, SSH and GitClub CLI</i> format and copy (preferably <i>HTTPS</i>)
+- In your <i>IDE</i> open <i>Git Bash</i>
+- Enter the command <code>git clone</code> followed by the copied URL
+- Your clone was created
+<hr>
 
-If you would like to contribute to the project. You can:
-1. Open the pizza ordering system repository on my account and 
-press the fork button on the top right of the screen.
-2. Click create a new fork.
-3. Navigate to your fork of the original repository.
-4. Copy the URL for the repository.
-5. Type git clone into your terminal and paste the repository.
-6. You can then create a pull request which I will review. 
+## CREDITS
+* The code for clearing the terminal was taken from [stackoverflow](https://stackoverflow.com/questions/2084508/clear-terminal-in-python)
+* I learned how to work with data and time strings from [educative.io](https://www.educative.io/edpresso/how-to-convert-a-string-to-a-date-in-python)
+* The code for linking to the Google Spreadsheet and manipulating it was taken and adapted from the Code Institute Love Sandwiches tutorial
+  
+<hr>
 
-### CLONE THE REPOSITORY ©
+## TOOLS
+[GitHub](https://github.com/) - used for hosting the source code of the program<br>
+[Gitpod Dev Environment](https://gitpod.io/) - used for testing the program<br>
+[PEP8 Validator](http://pep8online.com/) - used for validating the python code<br>
+[Heroku](https://dashboard.heroku.com/) - used for deploying the project<br>
+[LucidChart](https://www.lucidchart.com/) - used for creating the Flowchart
+[Favicon.io](https://favicon.io/) - used for generating the website favicon<br>
+[Diffchecker](https://www.diffchecker.com/) - used for comparing the code<br>
+[HTML - W3C HTML Validator](https://validator.w3.org/#validate_by_uri+with_options) - used for validating the HTML<br>
+[CSS - Jigsaw CSS Validator](https://jigsaw.w3.org/css-validator/#validate_by_uri) - used for validating the CSS<br>
 
-You can clone the repository to use locally by following these steps:
-1. Navigate to the GitHub Repository you want to clone
-2. Click on the code drop-down button
-3. Click on HTTPS
-4. Copy the repository link to the clipboard
-5. Open your IDE of choice (git must be installed for the next steps)
-6. Type git clone copied-git-url into the IDE terminal
-
-The project will now be cloned locally for you to use.
-
-
-## CREDITS 💛
-
-* Readme template adapted from [useriasminna](https://github.com/useriasminna/american_pizza_order_system/blob/main/README.md)
-* Inspiration for the large title heading from [Laura Mayock](https://github.com/LauraMayock/)
-* Manipulating Google Sheets [Gspread](https://docs.Gspread.org/en/latest/user-guide.html)
-* Try catch with loop [Paul Miskew](https://youtu.be/b0q9vVgAMq8?si=U_UnqDxHyZegVnsX)
-* [How to pass data between functions](https://www.youtube.com/watch?v=GsKDtSHRHdI) this video was used as a means to get over the issue of wishing to pass data to one function from 2 different functions
-* [Print two lists side by side on Stackoverflow ](https://stackoverflow.com/questions/48053979/print-2-lists-side-by-side)
-* [How to flatten a list from bobbyhadz blog](https://bobbyhadz.com/blog/python-remove-square-brackets-from-list)
-* [Switching keys and values in a dictionary from Stackoverflow](https://stackoverflow.com/questions/8305518/switching-keys-and-values-in-a-dictionary-in-python)
-
-## TOOLS 🧰
-
-* [Balsamiq Wireframes](https://balsamiq.com/wireframes/) were used to create a wireframe.
-* [GitHub](https://GitHub.com/) - used for hosting the source code of the program
-* [Google Drive API](https://developers.google.com/drive/api)- to develop apps that integrate with Drive
-* [Google Sheets API](https://developers.google.com/sheets/api/guides/concepts) - to read and modify Google Sheets data
-* [Google Auth](https://developers.google.com/identity/protocols/oauth2) - allows access to Google APIs
-* [Gspread](https://docs.Gspread.org/en/v5.10.0/) - Python API for Google Sheets
-* [Lucid Chart](https://www.lucidchart.com/pages/landing?utm_source=google&utm_medium=cpc&utm_campaign) - to create a flow chart outlining the project.
-* [Code Institute Pylinter](https://pep8ci.herokuapp.com/)
-
-## ACKNOWLEDGEMENTS 👏
-
-* I would like to thank my family for supporting me on this journey
-* Thank you Code Institute for this course
-* Special thanks to the government for funding my course
-* Special thanks to Iris Smok for the weekly meetings. Iris also recommended
-that I consider doing something like this pizza ordering system, as it complemented
-my first project, which was also on pizzas. 
-* Shout out to my colleagues for their feedback and support
-* Also special thanks to all those who contributed to Slack and Stackoverflow 
-and those who explained coding content on Youtube. 
+## ACKNOWLEDGEMENTS
+- Code Institute for all the material and support offered<br>
+- My mentor Ben Kavanagh for great tips and his willingness to help me as much as possible with the problems encountered during the development of the project<br>
+- Slack community for great involvement in helping each other<br>
+<hr>
